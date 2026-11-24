@@ -42,7 +42,7 @@ Stop after two review rounds and report what is left.
 ## 7. Close
 For a ticket, tick its acceptance boxes and set `Status: done`.
 
-Commit the work, following the commit rules in the core rules.
+Commit the work, following the commit rules in the core rules. Stage spec and ticket files only if the project `CLAUDE.md` says specs are committed.
 
 Report:
 - The commits, each with its subject and what it holds

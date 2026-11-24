@@ -33,7 +33,7 @@ Re-run the installer whenever a skill is added, renamed or removed. It's safe to
 ### Existing code
 
 1. `/setup-project` at the repo root. It runs the build, lint and test commands, maps the layout, and asks one round of questions the code can't answer. Each question shows what the code does now and why it matters. "Don't know" is a valid answer for anyone new to the codebase: it keeps the current behavior and lists the question to ask a teammate.
-2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It commits the file once approved.
+2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It always asks whether `CLAUDE.md` and the specs are committed or stay local. Local files go in `.git/info/exclude`, which keeps them out of git without touching `.gitignore`. Files git already tracks need `git rm --cached` first, and it asks before running that. Otherwise it commits the file once approved.
 
 Then work through its hand-off list:
 
@@ -46,7 +46,7 @@ Then work through its hand-off list:
 
 `/setup-project` needs code to read, so an empty repo starts with a **walking skeleton**: the thinnest version that builds, lints, tests and runs one trivial behavior end to end.
 
-1. `git init` and open Claude Code there.
+1. `git init` and open Claude Code there. To keep specs and `CLAUDE.md` local, add `docs/specs/` and `CLAUDE.md` to `.git/info/exclude` now, before anything is committed.
 2. `/interview-me <what to build>`. It also asks about stack, storage and how it runs. The boring, well-known option is usually right.
 3. `/to-spec`, then `/to-tickets`. Ticket 01 is always the skeleton.
 4. `/implement` ticket 01 in a fresh session.

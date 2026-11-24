@@ -35,6 +35,8 @@ Ask: <the question>
 Guess: <your best guess>
 ```
 
+Always ask one more question: should `CLAUDE.md` and the specs folder be committed, or stay local to this clone? Guess committed for a personal repo, local for a shared one.
+
 "Don't know" is a full answer. For those, write what the code does now as the rule, and list the question for the hand-off so I can ask a teammate.
 
 An answer that asks the code to change is a task, not a rule. Keep `CLAUDE.md` true to the code as it is today, and list the task for the hand-off.
@@ -42,7 +44,7 @@ An answer that asks the code to change is a task, not a rule. Keep `CLAUDE.md` t
 ## 6. Write
 Fill in [template.md](template.md). Keep it under 60 lines. Every line describes the code as it is now. Keep a line only if a new engineer would get it wrong without it. Don't restate config or anything one lookup in the code answers, except to name commands.
 
-Show me the draft. Write `CLAUDE.md` at the repo root once I approve.
+Show me the draft. Write `CLAUDE.md` at the repo root once I approve. If I chose local, add `CLAUDE.md` and the specs folder to `.git/info/exclude`, so git ignores them without a tracked change. If either is already tracked, exclude has no effect. Say so, and ask before running `git rm -r --cached` on it. Commit that removal on its own.
 
 ## 7. Hand off
 Report:
@@ -51,4 +53,4 @@ Report:
 - Questions I couldn't answer, to ask a teammate
 - Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
 
-Commit `CLAUDE.md`. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
+Commit `CLAUDE.md` unless I chose local. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
