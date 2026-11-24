@@ -1,0 +1,32 @@
+# Shipyard
+
+A Claude Code workflow: skills, a reviewer subagent, hooks and core rules that push agents toward simple, reused, verified code. This file is for working on Shipyard itself. `claude/CLAUDE.md` holds the rules Shipyard ships to every project.
+
+## Commands
+- Hook tests on Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File claude/hooks/test.ps1`
+- Hook tests on Linux, from Git Bash through WSL: `MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu --cd "<repo path under /mnt/c>" --exec bash claude/hooks/test.sh`
+- Try an installer without touching the real config: pass a temp dir, `install.ps1 -ClaudeDir <dir>` or `install.sh <dir>`. Run it twice to check re-runs. On Windows, remove the temp junctions with `cmd /c rmdir` before deleting the dir.
+
+## Where things live
+- `claude/`: everything that gets installed. `~/.claude/workflow` links here.
+- `claude/skills/<name>/SKILL.md`: one folder per skill. `claude/agents/reviewer.md`: the reviewer.
+- `claude/hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
+- `claude/permissions.json`: `ask` and `deny` rules both installers add.
+- `claude/conventions/`: per-language docs written by `/add-language`. They are the user's content.
+- `README.md` explains what and why. `GUIDE.md` explains how to use it.
+
+## Conventions
+- Write skills the way the core rules ask for code: short, plain, concrete. Steps in order, each with a clear finish line. Say what to do, not what to avoid.
+- Each fact lives in one place. Skills point to `claude/CLAUDE.md` instead of repeating its rules.
+- Only `review` and `retrospective` are model-invoked. Every other skill sets `disable-model-invocation: true`, so it costs no context.
+- Windows and Linux stay equal. A hook rule goes in `*.patterns` with a blocked and an allowed case in `*.cases.json`, then both test runners must pass. An installer change goes in both installers.
+- Installers stay safe to re-run, back up before writing, and never overwrite a path that isn't their own link.
+- When a skill is added, renamed or changes behavior, update every table and list that names it in `README.md` and `GUIDE.md` in the same change.
+- Use the skill names as written: `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `add-language`, `setup-project`.
+
+## Gotchas
+- Edits under `claude/` are live at once in every Claude Code session on this machine, because of the links. A broken hook or rule hits all of them.
+- The `no-push` hook blocks any shell command whose text mentions pushing, even inside a heredoc. Write such files with the editor tools.
+- The guard hook skips `*.patterns` and `*.cases.json` on purpose, since they hold the very code it blocks.
+- New skill folders only appear after re-running the installer. Edits to existing ones don't need it.
+- Plan mode is denied in the user's settings. Plans stop in chat.
