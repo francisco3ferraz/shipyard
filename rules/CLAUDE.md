@@ -38,6 +38,7 @@
 
 ## Commits
 - Commit on your own once the work is verified and reviewed. Never push or publish. I do that.
+- Skip review for a change that alters no behavior, like a typo, a reworded sentence or a comment fix. Still verify it.
 - Size each commit to review on its own: one logical change with its tests, and the build and tests pass at it.
 - Put a prefactor or a mechanical change, like a rename, move or reformat, in its own commit before the behavior change.
 - Stage files by name. Leave out unrelated changes and untracked files, and tell me what you left out.
