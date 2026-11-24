@@ -41,8 +41,10 @@ Guess: <your best guess>
 
 "Don't know" is a full answer. For those, write what the code does now as the rule, and list the question for the hand-off so I can ask a teammate.
 
+An answer that asks the code to change is a task, not a rule. Keep `CLAUDE.md` true to the code as it is today, and list the task for the hand-off.
+
 ## 6. Write
-Fill in [template.md](template.md). Keep it under 60 lines. Keep a line only if a new engineer would get it wrong without it. Don't restate config, except to name commands.
+Fill in [template.md](template.md). Keep it under 60 lines. Every line describes the code as it is now. Keep a line only if a new engineer would get it wrong without it. Don't restate config or anything one lookup in the code answers, except to name commands.
 
 Show me the draft. Write `CLAUDE.md` at the repo root once I approve.
 
@@ -53,5 +55,6 @@ Report:
 - Linter rules worth turning on
 - Where the code differs from a conventions doc
 - Questions I couldn't answer, to ask a teammate
+- Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
 
 Suggest committing `CLAUDE.md`. From here it stays fresh in three ways. The reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.

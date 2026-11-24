@@ -69,11 +69,16 @@ Run it at the repo root. It:
 5. Asks you one round of questions the code can't answer: gotchas, no-go areas, business rules. Each shows what the code does now and why it matters. New to the repo? Answer "don't know". It keeps the current behavior and lists the question for you to ask a teammate.
 6. Shows a draft `CLAUDE.md` under 60 lines. It writes it once you approve.
 
-At the end it reports failed commands, missing conventions docs and linter rules worth turning on. Act on all three:
+The `CLAUDE.md` describes the code as it is today. If one of your answers asks for a change, like "categories should ignore case", that becomes a task, not a line in the file.
+
+At the end it gives you a hand-off list. Act on each part:
 
 - **Failed commands.** Fix them or tell the agent the right one. A command that doesn't run means nothing gets verified.
 - **Missing conventions.** Run `/add-language` for each.
 - **Linter rules.** Turn them on yourself. Linters catch empty catches and focused tests in places the hooks can't see.
+- **Code that differs from a conventions doc.** The code wins by default. Change it only if your team agrees.
+- **Open questions.** Ask a teammate, then add the answer with `/retrospective`.
+- **Tasks.** Each comes as a ready `/implement` or `/interview-me` line. Run them after committing `CLAUDE.md`.
 
 Commit the `CLAUDE.md`.
 

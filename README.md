@@ -111,7 +111,7 @@ Run `/setup-project` in the repo. It writes a short `CLAUDE.md` holding only wha
 | Conventions | This codebase's own patterns | Errors bubble to `handleRequest` and nowhere else |
 | Gotchas | Traps and the reason for each | Never edit `generated/`. `pnpm codegen` overwrites it |
 
-It also lists failed commands, languages missing a conventions doc, and linter rules worth turning on. Keep it under 60 lines. Add to it later with `/retrospective`. Re-run `/setup-project` when it drifts.
+It also lists failed commands, languages missing a conventions doc, linter rules worth turning on, open questions, and tasks from your answers. Keep it under 60 lines. Add to it later with `/retrospective`. Re-run `/setup-project` when it drifts.
 
 The commands matter most. The agent can't verify what it can't run.
 
