@@ -1,33 +1,36 @@
 # Shipyard
 
-A Claude Code workflow for shipping simple, reused, verified code with agents. It grills the idea, specs it, builds it test-first, reviews it, and learns from your corrections.
+My setup for working with Claude Code.
 
-New here? Read the [usage guide](GUIDE.md).
+Agent code usually worked, but it kept going wrong in the same ways: hard to read, too many comments, helpers rewritten instead of reused, too many layers, tests that tested nothing, errors swallowed, unrelated changes, and "done" without running anything. Shipyard is the skills, rules and hooks I use to stop that.
 
-## The loop
+Day-to-day notes are in [GUIDE.md](GUIDE.md).
+
+## How I work
 
 ```
-/interview-me <idea> → /to-spec → [/to-tickets <spec>] → /implement <ticket> → review → commit → you push
+/interview-me <idea> → /to-spec → [/to-tickets <spec>] → /implement <ticket> → review → commit → I push
                                                          ↑                                 │
                                                          └────────── next ticket ──────────┘
-/retrospective         any time the agent does something you don't like
+/retrospective         when the agent does something I don't like
 /add-language <name>   once per language or framework
-/setup-project         once per repo, refresh when it drifts
+/setup-project         once per repo, again when it drifts
 ```
 
-1. **`/interview-me`** interviews you in rounds. Each question comes with a recommended answer. It digs for gaps, edge cases and decisions you haven't made, and ends with a **Decided** list you confirm.
-2. **`/to-spec`** turns that into `docs/specs/<slug>/spec.md`. Every behavior has a concrete example, which becomes a test. It tells you whether the spec fits one session.
-3. **`/to-tickets`** splits a spec that's too big into vertical-slice tickets you approve. Each can be built and verified alone.
-4. **`/implement`** loads the ticket or spec, plus the conventions docs. It plans, then runs red, green, refactor per behavior. Passing tests are frozen. It verifies for real, calls `review`, fixes the findings, then commits.
-5. **`review`** runs two subagents in parallel with fresh eyes. `spec-reviewer` checks the diff against the spec, ticket or prompt. `quality-reviewer` checks it against the coding rules and conventions. Their reports stay separate, so one can't hide the other. You can also run `/review` by hand on any diff.
-6. **`/retrospective`** turns a correction into one rule and files it where it belongs. It also fires when you say "don't do that again".
-7. **`/add-language`** researches primary sources and writes `conventions/<name>.md`. Implement and review both read it.
+1. **`/interview-me`** asks me questions in rounds until every decision is made. Each question comes with its recommended answer, so most of the time I just say yes.
+2. **`/to-spec`** writes down what we decided. Every behavior gets a concrete example, which later becomes a test.
+3. **`/to-tickets`** splits a spec that's too big for one session into slices I can build and check one at a time.
+4. **`/implement`** builds a ticket test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes what it finds and commits.
+5. **`review`** runs two subagents side by side. `spec-reviewer` checks the change against what was asked. `quality-reviewer` checks how it's written. I keep them apart so a good-looking diff can't hide a missing behavior, and the other way round.
+6. **`/retrospective`** turns a correction into one rule and puts it in the right file, so I only have to say it once.
+7. **`/add-language`** researches current, official sources for a language or framework and writes a conventions doc that implement and review both follow.
+8. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't find by reading the code.
 
-You decide at five points: the interview answers, the spec, the ticket split, reviewing the commits, and the push.
+I decide at five points: the interview answers, the spec, the ticket split, the commits, and the push.
 
-## Commits and pushing
+## Commits
 
-Agents commit on their own once work is verified and reviewed. Each commit is sized to review on its own: one logical change with its tests, passing at that commit. Prefactors and mechanical changes like renames get their own commit first. Agents stage files by name and never amend or rewrite pushed history. The style is lean:
+Agents commit on their own once the work is verified and reviewed. I want commits I can review one at a time: one logical change with its tests, passing on its own, with renames and prefactors in their own commit first. The style is short:
 
 ```
 Add retry to invoice sync
@@ -35,50 +38,40 @@ Add retry to invoice sync
 Provider drops ~1% of calls under load.
 ```
 
-An imperative subject under 50 characters, with no period. Add a body only when the why isn't obvious.
+Agents never push. `deny` rules and the `no-push` hook block it, so pushing stays my call.
 
-Agents can never push or publish. `deny` rules block `git push`, `gh pr create` and `gh pr merge`. The `no-push` hook also catches chained commands, PowerShell, and `publish` commands. Run `git push` yourself with `! git push`.
+## Why each piece exists
 
-## What blocks each problem
-
-| Problem | Where it's handled |
+| What kept going wrong | What handles it now |
 |---|---|
-| Hard to read | Core rules, conventions docs, refactor step, quality reviewer check 1 |
-| Too many comments | Core rules, quality reviewer check 2 |
-| Duplicated logic | Explore step, refactor step, quality reviewer greps for existing helpers |
-| Over-engineering | Core rules, `/interview-me` pushes for the smallest version, quality reviewer check 4 |
-| Low-value tests | Spec examples become expected values, frozen tests, `guard` hook, quality reviewer check 5 |
-| Hidden failures | Core rules, `guard` hook, spec lists every error case, quality reviewer check 6 |
-| Scope creep, unverified | Spec reviewer flags unasked changes, dependency installs ask you, verify step |
+| Hard to read | Core rules, conventions docs, the refactor step, quality check 1 |
+| Too many comments | Core rules, quality check 2 |
+| Duplicated logic | Searching before writing, the refactor step, quality check 3 |
+| Over-engineering | Core rules, the interview asks for the smallest version, quality check 4 |
+| Low-value tests | Spec examples become expected values, passing tests are frozen, the `guard` hook, quality check 5 |
+| Hidden failures | Core rules, the `guard` hook, every error case in the spec, quality check 6 |
+| Scope creep, unverified work | The spec reviewer flags unasked changes, dependency installs ask me, the verify step |
 
-## Files
+## What's in here
 
-| File | Role |
+| Path | What it is |
 |---|---|
-| [claude/CLAUDE.md](claude/CLAUDE.md) | Core rules, loaded in every session |
-| [claude/skills/](claude/skills/) | `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `add-language`, `setup-project` |
-| [claude/agents/spec-reviewer.md](claude/agents/spec-reviewer.md) | Read-only check against the spec, ticket or prompt |
-| [claude/agents/quality-reviewer.md](claude/agents/quality-reviewer.md) | Read-only check against the coding rules |
-| [claude/conventions/](claude/conventions/) | One doc per language or framework, from `/add-language` |
-| [claude/hooks/guard.patterns](claude/hooks/guard.patterns) | Blocks edits that skip tests or swallow errors |
-| [claude/hooks/no-push.patterns](claude/hooks/no-push.patterns) | Blocks push, PR and publish commands |
-| `claude/hooks/*.ps1`, `*.sh` | Thin hook runners for Windows and Linux that read the patterns |
-| `claude/hooks/*.cases.json`, `test.*` | Shared test cases and a runner per OS |
-| [claude/permissions.json](claude/permissions.json) | `ask` and `deny` rules both installers add |
-| [install.ps1](install.ps1), [install.sh](install.sh) | Link it all into `~/.claude` on Windows or Linux |
+| [claude/CLAUDE.md](claude/CLAUDE.md) | My core coding rules, loaded in every session |
+| [claude/skills/](claude/skills/) | The eight skills above |
+| [claude/agents/](claude/agents/) | `spec-reviewer` and `quality-reviewer`, both read-only |
+| [claude/conventions/](claude/conventions/) | One doc per language or framework |
+| [claude/hooks/](claude/hooks/) | `guard` blocks skipped tests and swallowed errors. `no-push` blocks pushes. Rules in `*.patterns`, tests in `*.cases.json` |
+| [claude/permissions.json](claude/permissions.json) | What needs my approval and what's denied |
+| [install.ps1](install.ps1), [install.sh](install.sh) | Installers for Windows and Linux |
 
-Only `/review` and `/retrospective` are model-invoked. The rest only run when you type them, so they cost no context.
+Rules live at four levels. The narrower one wins:
 
-## Where rules live
-
-| Scope | File |
+| Applies to | File |
 |---|---|
 | All code | `claude/CLAUDE.md` |
 | One language or framework | `claude/conventions/<name>.md` |
 | One project | That repo's `CLAUDE.md` |
-| Must never break | A pattern in `guard.patterns` |
-
-The project file wins over a conventions doc. Rules added by `/retrospective` to a conventions doc carry `(lesson)`, so a refresh keeps them.
+| Must never happen | A pattern in `claude/hooks/guard.patterns` |
 
 ## Install
 
@@ -89,41 +82,20 @@ powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
 bash install.sh                                         # Linux, needs jq, git and GNU grep
 ```
 
-Both installers do the same thing. Each backs up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then it:
+Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to `claude/`, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules.
 
-- Links `~/.claude/shipyard` to `claude/`, and each skill and the `agents` folder into `~/.claude`
-- Adds `@~/.claude/shipyard/CLAUDE.md` to your `~/.claude/CLAUDE.md`
-- Adds both hooks, `deny` rules for pushing, and `ask` rules for dependency installs and manifest edits
+Because it's linked, not copied, `/retrospective` and `/add-language` edit this repo directly and every session picks the change up. Restart Claude Code after installing.
 
-Links mean `/retrospective` and `/add-language` edit this repo directly. Commit their changes here. Restart Claude Code after installing.
-
-Then disable the `mattpocock-skills` plugin with `/plugin`. Its `tdd`, `grilling` and `code-review` overlap with these and would compete.
-
-## Per project
-
-Empty repo? Follow [Starting from scratch](GUIDE.md#starting-from-scratch) first.
-
-Run `/setup-project` in the repo. It writes a short `CLAUDE.md` holding only what an agent can't find by looking:
-
-| Section | Holds | Example |
-|---|---|---|
-| Commands | Build, lint and test commands it ran and saw work | `pnpm test -- path/to/file` |
-| Where things live | Folders that matter, shared helpers, specs | Shared helpers: `src/lib/` |
-| Conventions | This codebase's own patterns | Errors bubble to `handleRequest` and nowhere else |
-| Gotchas | Traps and the reason for each | Never edit `generated/`. `pnpm codegen` overwrites it |
-
-It also lists failed commands, languages missing a conventions doc, linter rules worth turning on, open questions, and tasks from your answers. Keep it under 60 lines. Add to it later with `/retrospective`. Re-run `/setup-project` when it drifts.
-
-The commands matter most. The agent can't verify what it can't run.
+I turned off the `mattpocock-skills` plugin, since its `tdd`, `grilling` and `code-review` overlap with these.
 
 ## Known gaps
 
-- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it. The quality reviewer still checks.
-- The no-push hook reads the whole command text. A command that only mentions a push, like a heredoc writing one into a file, is blocked too. Write such files with the editor tools instead.
-- Plain `npm install` also asks, since the rule can't tell restoring from adding.
-- Plan mode is denied in your settings, so plans stop in chat.
+- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it, though the quality reviewer still looks.
+- The no-push hook reads the whole command text, so a command that only mentions a push, like a heredoc, is blocked too.
+- Plain `npm install` asks for approval too, since the rule can't tell restoring from adding.
+- Plan mode is off in my settings, so plans stop in chat instead.
 
-## Sources
+## Where the ideas came from
 
 - [Matt Pocock's skills](https://github.com/mattpocock/skills), the starting point for the interview, spec, tickets, TDD and two-axis review
 - [Claude Code workflow best practices that ship code](https://dev.to/galian/claude-code-workflow-best-practices-that-ship-code-na)

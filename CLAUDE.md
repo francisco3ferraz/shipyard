@@ -13,7 +13,7 @@ A Claude Code workflow: skills, two reviewer subagents, hooks and core rules tha
 - `claude/hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
 - `claude/permissions.json`: `ask` and `deny` rules both installers add.
 - `claude/conventions/`: per-language docs written by `/add-language`. They are the user's content.
-- `README.md` explains what and why. `GUIDE.md` explains how to use it.
+- `README.md` explains what and why. `GUIDE.md` explains how to use it. Both are my own notes: first person, plain, no selling.
 
 ## Conventions
 - Write skills the way the core rules ask for code: short, plain, concrete. Steps in order, each with a clear finish line. Say what to do, not what to avoid.
