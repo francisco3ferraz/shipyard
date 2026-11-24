@@ -11,7 +11,6 @@
 
 ## Where things live
 - `<dir>`: <what's there>
-- Shared helpers: `<dir>`. Check here before writing a new one.
 - Specs and tickets: `docs/specs/`, <committed | local only, never commit>
 
 ## Conventions
