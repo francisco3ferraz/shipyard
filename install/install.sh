@@ -5,7 +5,8 @@
 set -euo pipefail
 
 claude_dir=${1:-$HOME/.claude}
-src=$(cd "$(dirname "$0")/claude" && pwd)
+here=$(cd "$(dirname "$0")" && pwd)
+root=$(dirname "$here")
 settings="$claude_dir/settings.json"
 memory="$claude_dir/CLAUDE.md"
 
@@ -24,23 +25,21 @@ backup="$claude_dir/backups/shipyard-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup" "$claude_dir/skills"
 for f in "$settings" "$memory"; do [[ -f "$f" ]] && cp "$f" "$backup/"; done
 
-# Older installs linked ~/.claude/workflow. Remove that link if it points here.
-if [[ -L "$claude_dir/workflow" && "$(readlink "$claude_dir/workflow")" == "$src" ]]; then rm "$claude_dir/workflow"; fi
-link "$claude_dir/shipyard" "$src"
-# Drop links to skills this repo no longer has, so renames don't leave dead skills behind.
-for l in "$claude_dir"/skills/*; do
-  if [[ -L "$l" && "$(readlink "$l")" == "$src"/* && ! -e "$l" ]]; then rm "$l"; fi
+# Drop links into this repo whose target is gone, so renames and moves don't leave dead links.
+for l in "$claude_dir"/* "$claude_dir"/skills/*; do
+  if [[ -L "$l" && "$(readlink "$l")" == "$root"/* && ! -e "$l" ]]; then rm "$l"; fi
 done
-for skill in "$src"/skills/*/; do
+link "$claude_dir/shipyard" "$root"
+for skill in "$root"/skills/*/; do
   skill=${skill%/}
   link "$claude_dir/skills/$(basename "$skill")" "$skill"
 done
-link "$claude_dir/agents" "$src/agents"
-chmod +x "$src"/hooks/*.sh
+link "$claude_dir/agents" "$root/agents"
+chmod +x "$root"/hooks/*.sh
 
 # The import sits between markers so a re-run replaces it instead of appending twice.
 # Older installs used workflow markers, so match both and write the shipyard ones.
-block=$'<!-- shipyard:begin -->\n@~/.claude/shipyard/CLAUDE.md\n<!-- shipyard:end -->'
+block=$'<!-- shipyard:begin -->\n@~/.claude/shipyard/rules/CLAUDE.md\n<!-- shipyard:end -->'
 touch "$memory"
 if grep -qE '<!-- (shipyard|workflow):begin -->' "$memory"; then
   BLOCK="$block" awk '
@@ -55,7 +54,7 @@ mv "$memory.tmp" "$memory"
 
 # Dependency installs ask first. Pushing is denied, and the no-push hook catches what deny rules miss.
 [[ -f "$settings" ]] || echo '{}' >"$settings"
-jq --slurpfile rules "$src/permissions.json" --arg hooks "$claude_dir/shipyard/hooks" '
+jq --slurpfile rules "$here/permissions.json" --arg hooks "$claude_dir/shipyard/hooks" '
   def hook($matcher; $script): {matcher: $matcher, hooks: [{type: "command", command: "bash \"\($hooks)/\($script)\""}]};
   .permissions.ask = ((.permissions.ask // []) as $e | $e + ($rules[0].ask - $e))
   | .permissions.deny = ((.permissions.deny // []) as $e | $e + ($rules[0].deny - $e))

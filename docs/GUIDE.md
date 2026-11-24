@@ -1,6 +1,6 @@
 # How I use Shipyard
 
-My notes on using this day to day. What's in the repo and why is in the [README](README.md).
+My notes on using this day to day. What's in the repo and why is in the [README](../README.md).
 
 1. [New machine](#new-machine)
 2. [New repo](#new-repo)
@@ -18,10 +18,10 @@ My notes on using this day to day. What's in the repo and why is in the [README]
 1. Clone this repo somewhere it can stay. The installer links to it, so moving it later breaks the links.
 2. Run the installer:
    ```powershell
-   powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
+   powershell -ExecutionPolicy Bypass -File install/install.ps1   # Windows
    ```
    ```bash
-   bash install.sh                                         # Linux, needs jq, git and GNU grep
+   bash install/install.sh                                       # Linux, needs jq, git and GNU grep
    ```
 3. Turn off any plugin with overlapping skills in `/plugin`.
 4. Restart Claude Code. Typing `/` should list all eight skills.
@@ -168,10 +168,10 @@ It works out what happened, what I want instead and why, writes one concrete rul
 | The lesson is about | It goes in |
 |---|---|
 | This project only | The project `CLAUDE.md` |
-| One language or framework | `claude/conventions/<name>.md`, tagged `(lesson)` |
-| Any code | `claude/CLAUDE.md` |
+| One language or framework | `rules/conventions/<name>.md`, tagged `(lesson)` |
+| Any code | `rules/CLAUDE.md` |
 | How a skill runs | That skill's `SKILL.md` |
-| Something review missed | The matching reviewer in `claude/agents/`, plus the rule's own home |
+| Something review missed | The matching reviewer in `agents/`, plus the rule's own home |
 
 If a regex can catch the mistake reliably, it also goes in `guard.patterns` with test cases. It shows me the edit before applying it, then commits it in this repo.
 
@@ -184,7 +184,7 @@ Concrete rules work, vague ones don't:
 
 **Push this repo too.** `/retrospective` and `/add-language` commit here. `git log` shows how the rules changed, and `git revert` undoes a bad one.
 
-**Prune once a month.** Read `claude/CLAUDE.md` and the conventions docs. Delete rules that never matter or that a linter now covers. Long rule files get ignored.
+**Prune once a month.** Read `rules/CLAUDE.md` and the conventions docs. Delete rules that never matter or that a linter now covers. Long rule files get ignored.
 
 **Keeping docs current:**
 
@@ -197,8 +197,8 @@ Concrete rules work, vague ones don't:
 **Testing the hooks after changing them:**
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File claude\hooks\test.ps1   # Windows
-bash claude/hooks/test.sh                                         # Linux
+powershell -ExecutionPolicy Bypass -File hooks/test.ps1   # Windows
+bash hooks/test.sh                                         # Linux
 ```
 
 Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. I edit those, not the scripts.
@@ -207,9 +207,9 @@ Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. I ed
 
 ## Fixing the setup
 
-**Skills missing after `/`.** Re-run the installer and restart. `~/.claude/skills/<name>` should link into this repo.
+**Skills missing after `/`.** Re-run the installer and restart. `~/.skills/<name>` should link into this repo.
 
-**Rules not applying.** `~/.claude/CLAUDE.md` should contain `@~/.claude/shipyard/CLAUDE.md` between the `shipyard` markers.
+**Rules not applying.** `~/.claude/CLAUDE.md` should contain `@~/.claude/shipyard/rules/CLAUDE.md` between the `shipyard` markers.
 
 **A hook blocks something legitimate.** Add the false alarm to its `.cases.json`, fix the pattern in its `.patterns`, run the tests.
 

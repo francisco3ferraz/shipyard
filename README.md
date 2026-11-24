@@ -4,7 +4,7 @@ My setup for working with Claude Code.
 
 Agent code usually worked, but it kept going wrong in the same ways: hard to read, too many comments, helpers rewritten instead of reused, too many layers, tests that tested nothing, errors swallowed, unrelated changes, and "done" without running anything. Shipyard is the skills, rules and hooks I use to stop that.
 
-Day-to-day notes are in [GUIDE.md](GUIDE.md).
+Day-to-day notes are in [docs/GUIDE.md](docs/GUIDE.md).
 
 ## How I work
 
@@ -56,33 +56,32 @@ Agents never push. `deny` rules and the `no-push` hook block it, so pushing stay
 
 | Path | What it is |
 |---|---|
-| [claude/CLAUDE.md](claude/CLAUDE.md) | My core coding rules, loaded in every session |
-| [claude/skills/](claude/skills/) | The eight skills above |
-| [claude/agents/](claude/agents/) | `spec-reviewer` and `quality-reviewer`, both read-only |
-| [claude/conventions/](claude/conventions/) | One doc per language or framework |
-| [claude/hooks/](claude/hooks/) | `guard` blocks skipped tests and swallowed errors. `no-push` blocks pushes. Rules in `*.patterns`, tests in `*.cases.json` |
-| [claude/permissions.json](claude/permissions.json) | What needs my approval and what's denied |
-| [install.ps1](install.ps1), [install.sh](install.sh) | Installers for Windows and Linux |
+| [rules/CLAUDE.md](rules/CLAUDE.md) | My core coding rules, loaded in every session |
+| [skills/](skills/) | The eight skills above |
+| [agents/](agents/) | `spec-reviewer` and `quality-reviewer`, both read-only |
+| [rules/conventions/](rules/conventions/) | One doc per language or framework |
+| [hooks/](hooks/) | `guard` blocks skipped tests and swallowed errors. `no-push` blocks pushes. Rules in `*.patterns`, tests in `*.cases.json` |
+| [install/](install/) | Installers for Windows and Linux, and the permission rules they add |
 
 Rules live at four levels. The narrower one wins:
 
 | Applies to | File |
 |---|---|
-| All code | `claude/CLAUDE.md` |
-| One language or framework | `claude/conventions/<name>.md` |
+| All code | `rules/CLAUDE.md` |
+| One language or framework | `rules/conventions/<name>.md` |
 | One project | That repo's `CLAUDE.md` |
-| Must never happen | A pattern in `claude/hooks/guard.patterns` |
+| Must never happen | A pattern in `hooks/guard.patterns` |
 
 ## Install
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
+powershell -ExecutionPolicy Bypass -File install/install.ps1   # Windows
 ```
 ```bash
-bash install.sh                                         # Linux, needs jq, git and GNU grep
+bash install/install.sh                                       # Linux, needs jq, git and GNU grep
 ```
 
-Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to `claude/`, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules.
+Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to this repo, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules.
 
 Because it's linked, not copied, `/retrospective` and `/add-language` edit this repo directly and every session picks the change up. Restart Claude Code after installing.
 

@@ -3,7 +3,7 @@
 param([string]$ClaudeDir = (Join-Path $HOME '.claude'))
 
 $ErrorActionPreference = 'Stop'
-$src = Join-Path $PSScriptRoot 'claude'
+$root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $settingsPath = Join-Path $ClaudeDir 'settings.json'
 $memoryPath = Join-Path $ClaudeDir 'CLAUDE.md'
 $utf8 = New-Object Text.UTF8Encoding($false)
@@ -21,24 +21,21 @@ foreach ($f in $settingsPath, $memoryPath) {
     if (Test-Path $f) { Copy-Item $f $backup }
 }
 
-# Older installs linked ~/.claude/workflow. Remove that link if it points here.
-$oldLink = Get-Item -LiteralPath (Join-Path $ClaudeDir 'workflow') -Force -ErrorAction SilentlyContinue
-if ($oldLink -and $oldLink.LinkType -eq 'Junction' -and $oldLink.Target -contains $src) { cmd /c rmdir "$($oldLink.FullName)" }
-Set-Link (Join-Path $ClaudeDir 'shipyard') $src
 New-Item -ItemType Directory -Force (Join-Path $ClaudeDir 'skills') | Out-Null
-# Drop links to skills this repo no longer has, so renames don't leave dead skills behind.
-foreach ($link in Get-ChildItem (Join-Path $ClaudeDir 'skills') | Where-Object { $_.LinkType -eq 'Junction' }) {
+# Drop links into this repo whose target is gone, so renames and moves don't leave dead links.
+foreach ($link in Get-ChildItem $ClaudeDir, (Join-Path $ClaudeDir 'skills') | Where-Object { $_.LinkType -eq 'Junction' }) {
     $target = [string]$link.Target
-    if ($target.StartsWith($src) -and -not (Test-Path -LiteralPath $target)) { cmd /c rmdir "$($link.FullName)" }
+    if ($target.StartsWith($root, 'OrdinalIgnoreCase') -and -not (Test-Path -LiteralPath $target)) { cmd /c rmdir "$($link.FullName)" }
 }
-foreach ($skill in Get-ChildItem -Directory (Join-Path $src 'skills')) {
+Set-Link (Join-Path $ClaudeDir 'shipyard') $root
+foreach ($skill in Get-ChildItem -Directory (Join-Path $root 'skills')) {
     Set-Link (Join-Path $ClaudeDir "skills\$($skill.Name)") $skill.FullName
 }
-Set-Link (Join-Path $ClaudeDir 'agents') (Join-Path $src 'agents')
+Set-Link (Join-Path $ClaudeDir 'agents') (Join-Path $root 'agents')
 
 # The import sits between markers so a re-run replaces it instead of appending twice.
 # Older installs used workflow markers, so match both and write the shipyard ones.
-$block = "<!-- shipyard:begin -->`n@~/.claude/shipyard/CLAUDE.md`n<!-- shipyard:end -->"
+$block = "<!-- shipyard:begin -->`n@~/.claude/shipyard/rules/CLAUDE.md`n<!-- shipyard:end -->"
 $memory = if (Test-Path $memoryPath) { [IO.File]::ReadAllText($memoryPath) } else { '' }
 $pattern = '<!-- (shipyard|workflow):begin -->[\s\S]*?<!-- (shipyard|workflow):end -->'
 if ($memory -match $pattern) {
@@ -54,7 +51,7 @@ function Set-Prop($obj, $name, $value) {
 }
 
 # Dependency installs ask first. Pushing is denied, and the no-push hook catches what deny rules miss.
-$rules = [IO.File]::ReadAllText((Join-Path $src 'permissions.json')) | ConvertFrom-Json
+$rules = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'permissions.json')) | ConvertFrom-Json
 if (-not $settings.PSObject.Properties['permissions']) { Set-Prop $settings 'permissions' (New-Object PSObject) }
 foreach ($kind in 'ask', 'deny') {
     $existing = @($settings.permissions.$kind | Where-Object { $_ })

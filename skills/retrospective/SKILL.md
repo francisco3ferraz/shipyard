@@ -17,8 +17,8 @@ Shipyard files live in `~/.claude/shipyard/`, which links to the Shipyard git re
 | The lesson is about | Home |
 |---|---|
 | This project only | The project `CLAUDE.md` |
-| One language or framework | `~/.claude/shipyard/conventions/<name>.md`, in the matching section |
-| Any code anywhere | `~/.claude/shipyard/CLAUDE.md` |
+| One language or framework | `~/.claude/shipyard/rules/conventions/<name>.md`, in the matching section |
+| Any code anywhere | `~/.claude/shipyard/rules/CLAUDE.md` |
 | How a Shipyard step runs | That skill's `SKILL.md` |
 | Something review should have caught | `~/.claude/shipyard/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
 
