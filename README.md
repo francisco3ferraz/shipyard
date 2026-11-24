@@ -13,7 +13,6 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
                                                          ↑                                 │
                                                          └────────── next ticket ──────────┘
 /retrospective         after correcting the agent
-/add-language <name>   once per language or framework
 /setup-project         once per repo, again when it drifts
 ```
 
@@ -23,8 +22,7 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
 4. **`/implement`** builds a spec, ticket or task test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes the findings and commits.
 5. **`review`** runs two subagents in parallel. `spec-reviewer` checks the change against what was asked. `quality-reviewer` checks how it's written. Keeping them apart stops a clean diff from hiding a missing behavior, and the other way round.
 6. **`/retrospective`** turns a correction into one rule and files it where it belongs, so it only needs saying once.
-7. **`/add-language`** researches current, official sources for a language or framework and writes a conventions doc that implement and review follow.
-8. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't learn from the code.
+7. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't learn from the code.
 
 Human decisions happen at five points: the interview answers, the spec, the ticket split, the commits, and the push.
 
@@ -44,7 +42,7 @@ Agents never push. `deny` rules and the `no-push` hook block it.
 
 | Problem | Handled by |
 |---|---|
-| Hard to read | Core rules, conventions docs, the refactor step, quality check 1 |
+| Hard to read | Core rules, the refactor step, quality check 1 |
 | Too many comments | Core rules, quality check 2 |
 | Duplicated logic | Searching before writing, the refactor step, quality check 3 |
 | Over-engineering | Core rules, the interview asks for the smallest version, quality check 4 |
@@ -57,19 +55,17 @@ Agents never push. `deny` rules and the `no-push` hook block it.
 | Path | Contents |
 |---|---|
 | [rules/CLAUDE.md](rules/CLAUDE.md) | Core coding rules, loaded in every session |
-| [rules/conventions/](rules/conventions/) | One doc per language or framework |
-| [skills/](skills/) | The eight skills above |
+| [skills/](skills/) | The seven skills above |
 | [agents/](agents/) | `spec-reviewer` and `quality-reviewer`, both read-only |
 | [hooks/](hooks/) | `guard` blocks skipped tests and swallowed errors. `no-push` blocks pushes. Rules in `*.patterns`, tests in `*.cases.json` |
 | [install/](install/) | Installers for Windows and Linux, and the permission rules they add |
 | [docs/](docs/) | Usage guide |
 
-Rules live at four levels. The narrower one wins:
+Rules live at three levels. The narrower one wins:
 
 | Applies to | File |
 |---|---|
 | All code | `rules/CLAUDE.md` |
-| One language or framework | `rules/conventions/<name>.md` |
 | One project | That repo's `CLAUDE.md` |
 | Must never happen | A pattern in `hooks/guard.patterns` |
 
@@ -84,7 +80,7 @@ bash install/install.sh                                       # Linux, needs jq,
 
 Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to this repo, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules.
 
-The install links rather than copies, so `/retrospective` and `/add-language` edit this repo directly and every session sees the change. Restart Claude Code after installing.
+The install links rather than copies, so `/retrospective` edits this repo directly and every session sees the change. Restart Claude Code after installing.
 
 Plugins with overlapping skills, like `mattpocock-skills` with its `tdd`, `grilling` and `code-review`, should be turned off.
 

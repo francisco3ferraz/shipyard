@@ -24,7 +24,7 @@ Day-to-day usage. What's in the repo and why is in the [README](../README.md).
    bash install/install.sh                                       # Linux, needs jq, git and GNU grep
    ```
 3. Turn off any plugin with overlapping skills in `/plugin`.
-4. Restart Claude Code. Typing `/` should list all eight skills.
+4. Restart Claude Code. Typing `/` should list all seven skills.
 
 Re-run the installer whenever a skill is added, renamed or removed. It's safe to run again.
 
@@ -32,15 +32,13 @@ Re-run the installer whenever a skill is added, renamed or removed. It's safe to
 
 ### Existing code
 
-1. `/add-language` for each main language or framework without a doc, like `/add-language go 1.27`. A framework doc builds on its language doc, so add `typescript` before `react`. Read the doc and cut anything that doesn't fit before approving it.
-2. `/setup-project` at the repo root. It runs the build, lint and test commands, maps the layout, and asks one round of questions the code can't answer. Each question shows what the code does now and why it matters. "Don't know" is a valid answer for anyone new to the codebase: it keeps the current behavior and lists the question to ask a teammate.
-3. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It commits the file once approved.
+1. `/setup-project` at the repo root. It runs the build, lint and test commands, maps the layout, and asks one round of questions the code can't answer. Each question shows what the code does now and why it matters. "Don't know" is a valid answer for anyone new to the codebase: it keeps the current behavior and lists the question to ask a teammate.
+2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It commits the file once approved.
 
 Then work through its hand-off list:
 
 - **Failed commands.** Fix these first. Nothing gets verified if the commands don't run.
 - **Linter rules.** Turn them on. Linters catch empty catches and focused tests in places the hooks can't see.
-- **Code that differs from a conventions doc.** The code wins unless the team decides otherwise.
 - **Open questions.** Ask a teammate, then add the answer with `/retrospective`.
 - **Tasks.** Each comes as a ready `/implement` or `/interview-me` line.
 
@@ -50,11 +48,10 @@ Then work through its hand-off list:
 
 1. `git init` and open Claude Code there.
 2. `/interview-me <what to build>`. It also asks about stack, storage and how it runs. The boring, well-known option is usually right.
-3. `/add-language` for that stack, so the skeleton follows its conventions from the first line.
-4. `/to-spec`, then `/to-tickets`. Ticket 01 is always the skeleton.
-5. `/implement` ticket 01 in a fresh session.
-6. `/setup-project`, now that there are real commands and a layout.
-7. Continue with ticket 02.
+3. `/to-spec`, then `/to-tickets`. Ticket 01 is always the skeleton.
+4. `/implement` ticket 01 in a fresh session.
+5. `/setup-project`, now that there are real commands and a layout.
+6. Continue with ticket 02.
 
 Keep the skeleton tiny. Its job is to prove the commands work, not to start on features.
 
@@ -113,7 +110,7 @@ Push back on horizontal tickets like "add the DB table", and on anything too big
 
 Use a fresh session per ticket. Leftover context makes the agent sloppier.
 
-1. **Load** the ticket, spec, project `CLAUDE.md` and conventions docs.
+1. **Load** the ticket, spec and project `CLAUDE.md`.
 2. **Explore** the code it will touch and find what to reuse.
 3. **Plan.** It only stops for approval if the plan goes beyond the spec, like a new module or dependency. For a plain task it always stops.
 4. **Build test-first.** Failing test, watch it fail, simplest code to pass, clean up. A test that has passed is frozen.
@@ -168,8 +165,7 @@ It works out what happened, what's wanted instead and why, writes one concrete r
 | The lesson is about | It goes in |
 |---|---|
 | This project only | The project `CLAUDE.md` |
-| One language or framework | `rules/conventions/<name>.md`, tagged `(lesson)` |
-| Any code | `rules/CLAUDE.md` |
+| Any code anywhere, or one language | `rules/CLAUDE.md`. The rule names the language if it has one. |
 | How a skill runs | That skill's `SKILL.md` |
 | Something review missed | The matching reviewer in `agents/`, plus the rule's own home |
 
@@ -182,16 +178,15 @@ Concrete rules work, vague ones don't:
 
 ## Upkeep
 
-**Push this repo too.** `/retrospective` and `/add-language` commit here. `git log` shows how the rules changed, and `git revert` undoes a bad one.
+**Push this repo too.** `/retrospective` commits here. `git log` shows how the rules changed, and `git revert` undoes a bad one.
 
-**Prune monthly.** Read `rules/CLAUDE.md` and the conventions docs. Delete rules that never matter or that a linter now covers. Long rule files get ignored.
+**Prune monthly.** Read `rules/CLAUDE.md`. Delete rules that never matter or that a linter now covers. Long rule files get ignored.
 
 **Keeping docs current:**
 
 | File | Goes stale when | Kept current by |
 |---|---|---|
 | A project `CLAUDE.md` | A command, folder or pattern changes | The quality reviewer flags it, and it's fixed in the same change. Re-run `/setup-project` after big restructures. |
-| Conventions docs | The project moves to a newer version | `/implement` reports the gap. `/add-language <name> <version>` refreshes it and keeps `(lesson)` rules. |
 | Specs and tickets | Never | They record a decision. Code and tests hold the current truth. |
 
 **Testing the hooks after changing them:**
@@ -203,7 +198,7 @@ bash hooks/test.sh                                         # Linux
 
 Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. Edit those, not the scripts.
 
-**Repeated review findings** mean a rule belongs earlier: in a `CLAUDE.md`, a conventions doc, or the linter.
+**Repeated review findings** mean a rule belongs earlier: in a `CLAUDE.md` or the linter.
 
 ## Fixing the setup
 
@@ -224,7 +219,6 @@ Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. Edit
 | Command | When |
 |---|---|
 | `/setup-project` | Once per repo, again when it drifts |
-| `/add-language <name> [version]` | Once per language or framework |
 | `/interview-me <idea>` | Any feature with open decisions |
 | `/to-spec` | Right after the interview |
 | `/to-tickets <spec>` | When the spec needs more than one session |

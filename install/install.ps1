@@ -1,5 +1,5 @@
 # Links Shipyard into your user-level Claude Code config. Safe to re-run.
-# Links, not copies, so /retrospective and /add-language edit this repo directly.
+# Links, not copies, so /retrospective edits this repo directly.
 param([string]$ClaudeDir = (Join-Path $HOME '.claude'))
 
 $ErrorActionPreference = 'Stop'

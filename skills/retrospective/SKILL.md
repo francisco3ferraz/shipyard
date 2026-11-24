@@ -17,16 +17,11 @@ Shipyard files live in `~/.claude/shipyard/`, which links to the Shipyard git re
 | The lesson is about | Home |
 |---|---|
 | This project only | The project `CLAUDE.md` |
-| One language or framework | `~/.claude/shipyard/rules/conventions/<name>.md`, in the matching section |
-| Any code anywhere | `~/.claude/shipyard/rules/CLAUDE.md` |
+| Any code anywhere, or one language | `~/.claude/shipyard/rules/CLAUDE.md`. Name the language in the rule if it has one. |
 | How a Shipyard step runs | That skill's `SKILL.md` |
 | Something review should have caught | `~/.claude/shipyard/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
 
-In a conventions doc, end the rule with `(lesson)` so `/add-language` keeps it on refresh.
-
 If a regex can catch it with no false alarms, also add a rule to `~/.claude/shipyard/hooks/guard.patterns`, and a blocked and an allowed case to `guard.cases.json` beside it. Both the Windows and Linux hooks read these files. Run `test.ps1` on Windows or `test.sh` on Linux.
-
-If a conventions doc for the language doesn't exist yet, suggest `/add-language`.
 
 ## 3. Fit it in
 Read the target file. If a rule already covers the lesson, sharpen that rule instead of adding one. If the lesson contradicts a rule, ask me which wins. Keep `CLAUDE.md` files short. Long ones get ignored.

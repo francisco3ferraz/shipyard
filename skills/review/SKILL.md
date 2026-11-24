@@ -18,7 +18,6 @@ If none exists, ask me what the change was for.
 ## 3. Find the standards
 - `~/.claude/shipyard/rules/CLAUDE.md`
 - The project `CLAUDE.md` and any coding standards doc it points to
-- `~/.claude/shipyard/rules/conventions/<name>.md` for each language and framework in the diff, if it exists
 
 ## 4. Run both reviewers
 Spawn both subagents in one message, so they run in parallel:

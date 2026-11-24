@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Links Shipyard into your user-level Claude Code config on Linux. Safe to re-run.
-# Links, not copies, so /retrospective and /add-language edit this repo directly.
+# Links, not copies, so /retrospective edits this repo directly.
 # Usage: ./install.sh [claude dir, default ~/.claude]
 set -euo pipefail
 

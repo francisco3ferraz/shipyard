@@ -20,10 +20,6 @@ Note the folders that matter and what each holds. Find where shared helpers and 
 ## 4. Read the patterns
 Read a few typical files and tests. Note only patterns that differ from common defaults or that a newcomer would get wrong: how errors flow, how tests are set up, what gets mocked, naming habits.
 
-List the languages and frameworks in use. Name the ones with no doc in `~/.claude/shipyard/rules/conventions/`, so I can run `/add-language`.
-
-Where the code consistently differs from a conventions doc, the code wins. Write the code's pattern into `CLAUDE.md` and list the difference for the hand-off. Don't ask me about it.
-
 Check whether the linter flags empty catches, swallowed errors, and skipped or focused tests. List the rules to turn on. Don't change the config.
 
 ## 5. Ask me
@@ -51,9 +47,7 @@ Show me the draft. Write `CLAUDE.md` at the repo root once I approve.
 ## 7. Hand off
 Report:
 - Commands that failed
-- Conventions docs to add with `/add-language`
 - Linter rules worth turning on
-- Where the code differs from a conventions doc
 - Questions I couldn't answer, to ask a teammate
 - Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
 

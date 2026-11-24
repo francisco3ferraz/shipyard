@@ -1,8 +1,5 @@
 # How I want code written
 
-## Conventions
-- Before writing or reviewing code, read the doc for each language and framework involved in `~/.claude/shipyard/rules/conventions/`, if one exists. The project's own `CLAUDE.md` wins over those docs. Where existing code consistently differs from a doc, follow the code and mention the difference.
-
 ## Before writing code
 - Read the code you will change, its callers and its tests. Match their naming, structure, error handling and test style.
 - Search for existing helpers and similar logic first. Reuse or extend them. If you write something new that looks reusable, say why the existing code didn't fit.

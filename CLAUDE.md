@@ -13,7 +13,6 @@ A Claude Code workflow: skills, two reviewer subagents, hooks and core rules tha
 - `skills/<name>/SKILL.md`: one folder per skill. `agents/`: `spec-reviewer` and `quality-reviewer`, run in parallel by `review`.
 - `hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
 - `install/permissions.json`: `ask` and `deny` rules both installers add.
-- `rules/conventions/`: per-language docs written by `/add-language`. They are the user's content.
 - `README.md` explains what and why. `docs/GUIDE.md` explains how to use it. Both document a personal setup: proper docs in a neutral voice, no first person, no selling.
 
 ## Conventions
@@ -23,7 +22,7 @@ A Claude Code workflow: skills, two reviewer subagents, hooks and core rules tha
 - Windows and Linux stay equal. A hook rule goes in `*.patterns` with a blocked and an allowed case in `*.cases.json`, then both test runners must pass. An installer change goes in both installers.
 - Installers stay safe to re-run, back up before writing, and never overwrite a path that isn't their own link.
 - When a skill is added, renamed or changes behavior, update every table and list that names it in `README.md` and `docs/GUIDE.md` in the same change.
-- Use the skill names as written: `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `add-language`, `setup-project`.
+- Use the skill names as written: `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `setup-project`.
 
 ## Gotchas
 - Edits to `rules/`, `skills/`, `agents/` and `hooks/` are live at once in every Claude Code session on this machine, because of the links. A broken hook or rule hits all of them.
