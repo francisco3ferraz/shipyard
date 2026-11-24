@@ -7,7 +7,7 @@ New here? Read the [usage guide](GUIDE.md).
 ## The loop
 
 ```
-/interview-me <idea> → /to-spec → [/to-tickets <spec>] → /implement <ticket> → review → you commit and push
+/interview-me <idea> → /to-spec → [/to-tickets <spec>] → /implement <ticket> → review → commit → you push
                                                          ↑                                 │
                                                          └────────── next ticket ──────────┘
 /retrospective         any time the agent does something you don't like
@@ -18,16 +18,16 @@ New here? Read the [usage guide](GUIDE.md).
 1. **`/interview-me`** interviews you in rounds. Each question comes with a recommended answer. It digs for gaps, edge cases and decisions you haven't made, and ends with a **Decided** list you confirm.
 2. **`/to-spec`** turns that into `docs/specs/<slug>/spec.md`. Every behavior has a concrete example, which becomes a test. It tells you whether the spec fits one session.
 3. **`/to-tickets`** splits a spec that's too big into vertical-slice tickets you approve. Each can be built and verified alone.
-4. **`/implement`** loads the ticket or spec, plus the conventions docs. It plans, then runs red, green, refactor per behavior. Passing tests are frozen. It verifies for real, then calls `review`.
+4. **`/implement`** loads the ticket or spec, plus the conventions docs. It plans, then runs red, green, refactor per behavior. Passing tests are frozen. It verifies for real, calls `review`, fixes the findings, then commits.
 5. **`review`** runs two subagents in parallel with fresh eyes. `spec-reviewer` checks the diff against the spec, ticket or prompt. `quality-reviewer` checks it against the coding rules and conventions. Their reports stay separate, so one can't hide the other. You can also run `/review` by hand on any diff.
 6. **`/retrospective`** turns a correction into one rule and files it where it belongs. It also fires when you say "don't do that again".
 7. **`/add-language`** researches primary sources and writes `conventions/<name>.md`. Implement and review both read it.
 
-You decide at five points: the interview answers, the spec, the ticket split, the final diff, and the push.
+You decide at five points: the interview answers, the spec, the ticket split, reviewing the commits, and the push.
 
 ## Commits and pushing
 
-Agents commit only when you ask, in a lean style:
+Agents commit on their own once work is verified and reviewed. Each commit is sized to review on its own: one logical change with its tests, passing at that commit. Prefactors and mechanical changes like renames get their own commit first. Agents stage files by name and never amend or rewrite pushed history. The style is lean:
 
 ```
 Add retry to invoice sync
@@ -35,7 +35,7 @@ Add retry to invoice sync
 Provider drops ~1% of calls under load.
 ```
 
-An imperative subject under 50 characters, with no period. Add a body only when the why isn't obvious. One logical change per commit.
+An imperative subject under 50 characters, with no period. Add a body only when the why isn't obvious.
 
 Agents can never push or publish. `deny` rules block `git push`, `gh pr create` and `gh pr merge`. The `no-push` hook also catches chained commands, PowerShell, and `publish` commands. Run `git push` yourself with `! git push`.
 

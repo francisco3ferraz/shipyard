@@ -60,4 +60,4 @@ Framework, file layout, assertion style, how to fake boundaries.
 ```
 
 ## 5. Hand off
-Summarize the rules that will change code the most. Ask me to review the doc. Remind me to commit it in the workflow repo.
+Summarize the rules that will change code the most. Ask me to review the doc. Once I approve, commit it in the workflow repo.

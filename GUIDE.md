@@ -50,7 +50,7 @@ Do this once per repo, before the first feature.
 2. `/interview-me <what you want to build>`. It also asks about stack, storage and how it runs. Pick the boring option unless you have a reason.
 3. `/add-language` for the stack you chose, so the skeleton follows its conventions from line one.
 4. `/to-spec`, then `/to-tickets`. Ticket 01 is always the walking skeleton.
-5. `/implement` ticket 01 in a fresh session. Commit it.
+5. `/implement` ticket 01 in a fresh session. It commits the skeleton.
 6. `/setup-project`. Now it has real commands to verify and a layout to map.
 7. Carry on with ticket 02 as usual.
 
@@ -78,15 +78,15 @@ At the end it gives you a hand-off list. Act on each part:
 - **Linter rules.** Turn them on yourself. Linters catch empty catches and focused tests in places the hooks can't see.
 - **Code that differs from a conventions doc.** The code wins by default. Change it only if your team agrees.
 - **Open questions.** Ask a teammate, then add the answer with `/retrospective`.
-- **Tasks.** Each comes as a ready `/implement` or `/interview-me` line. Run them after committing `CLAUDE.md`.
+- **Tasks.** Each comes as a ready `/implement` or `/interview-me` line. Run them once `CLAUDE.md` is committed.
 
-Commit the `CLAUDE.md`.
+The agent commits `CLAUDE.md` once you approve the draft.
 
 #### `/add-language <name> [version]`
 
 Run it once per language or framework, for example `/add-language python 3.13` or `/add-language react 19`. It searches official docs and tool docs, keeps only rules that change the code an agent writes, and saves `claude/conventions/<name>.md` in this repo.
 
-Read the doc before you accept it. Cut anything you disagree with. Then commit it **in this repo**, since it's shared by every project.
+Read the doc before you accept it. Cut anything you disagree with. Once you approve, the agent commits it **in this repo**, since it's shared by every project.
 
 A framework doc builds on its language doc. Add `typescript` before `react`.
 
@@ -164,19 +164,21 @@ What happens:
 4. **Build test-first.** For each behavior: write a failing test, watch it fail, write the simplest code to pass, then clean up. A test that has passed is frozen.
 5. **Verify.** Full test suite, typecheck, linter, then it runs the change for real.
 6. **Review.** It calls `review`, which runs `spec-reviewer` and `quality-reviewer` in parallel. It fixes the findings. Up to two rounds.
-7. **Close.** It ticks the ticket, sets `Status: done`, and reports.
+7. **Close.** It ticks the ticket, sets `Status: done`, commits, and reports.
 
-You'll get a report with changed files, commands run, anything it couldn't verify, problems it left alone and a suggested commit message.
+Commits are sized to review one at a time. Each holds one logical change with its tests and passes on its own. A prefactor or rename comes first in its own commit. Files are staged by name, and anything left out is reported.
 
-### Step 5: you review and commit
+You'll get a report with the commits, commands run, anything it couldn't verify and problems it left alone.
 
-Read the diff yourself. The reviewer is good, but you own the code. Look hardest at:
+### Step 5: you review the commits and push
+
+Read each commit with `git show` or in your editor. The reviewers are good, but you own the code. Look hardest at:
 
 - Tests: do they check what the spec says, with real values?
 - Error handling: does anything get swallowed?
 - Anything the report says it couldn't verify.
 
-Then ask the agent to commit, or commit yourself. Push with `! git push`. Agents can't push.
+Ask for fixes, and they land as new commits. When it's right, push with `! git push`. Agents can't push.
 
 Next ticket: new session, `/implement` the next one.
 
@@ -212,7 +214,7 @@ New session:
 > /implement docs/specs/password-reset/01-request-reset.md
 ```
 
-It writes a failing test for "known email gets one email", makes it pass with the existing mailer, then moves on. The quality reviewer flags a `try/except` that hid mailer errors. It fixes it. You read the diff, commit, and start the next ticket in a fresh session.
+It writes a failing test for "known email gets one email", makes it pass with the existing mailer, then moves on. The quality reviewer flags a `try/except` that hid mailer errors. It fixes it. It commits. You read the commits, push, and start the next ticket in a fresh session.
 
 ## 6. When something goes wrong
 
@@ -259,7 +261,7 @@ It will:
 4. Show you the exact edit and apply it once you agree.
 5. If a regex can catch the mistake reliably, add it to `guard.patterns` with test cases.
 
-Edits to `claude/` land in this repo, because of the links. Commit them here.
+Edits to `claude/` land in this repo, because of the links. The agent commits them here. Push them yourself.
 
 Good lessons are concrete:
 
@@ -268,7 +270,7 @@ Good lessons are concrete:
 
 ## 8. Keeping it healthy
 
-**Commit workflow changes.** After any `/retrospective` or `/add-language`, commit in this repo. Use `git log` here to see how your rules evolved, and `git revert` to undo a bad one.
+**Push workflow changes.** `/retrospective` and `/add-language` commit in this repo. Push those commits too. Use `git log` here to see how your rules evolved, and `git revert` to undo a bad one.
 
 **Prune monthly.** Read `claude/CLAUDE.md` and each conventions doc. Delete rules that never fire or that the linter now covers. Long rule files get ignored.
 
@@ -319,4 +321,4 @@ Rules live in `*.patterns` and test cases in `*.cases.json`. Both OSes share the
 | `/retrospective` | Right after you correct the agent |
 | `! git push` | Only you push |
 
-Your five decision points: the interview answers, the spec, the ticket split, the final diff, and the push.
+Your five decision points: the interview answers, the spec, the ticket split, reviewing the commits, and the push.

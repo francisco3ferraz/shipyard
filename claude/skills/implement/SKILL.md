@@ -42,12 +42,13 @@ Stop after two review rounds and report what is left.
 ## 7. Close
 For a ticket, tick its acceptance boxes and set `Status: done`.
 
+Commit the work, following the commit rules in the core rules.
+
 Report:
-- What changed, with file links
+- The commits, each with its subject and what it holds
 - Commands you ran and their results
 - Anything you could not verify
 - Problems you noticed but left alone
 - Conventions docs behind the project's version, with the `/add-language <name> <version>` to refresh each
-- A suggested commit message
 
-I review the diff and commit.
+I review the commits and push.

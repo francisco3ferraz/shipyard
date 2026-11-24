@@ -35,4 +35,4 @@ Read the target file. If a rule already covers the lesson, sharpen that rule ins
 Show me the exact edit. Apply it once I agree.
 
 ## 5. Report
-Name the file and line. If the edit is in the workflow repo, remind me to commit it there. Ask if I want the original code fixed now.
+Name the file and line. If the edit is in the workflow repo, commit it there. Ask if I want the original code fixed now.

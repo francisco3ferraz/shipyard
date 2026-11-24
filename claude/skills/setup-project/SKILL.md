@@ -57,4 +57,4 @@ Report:
 - Questions I couldn't answer, to ask a teammate
 - Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
 
-Suggest committing `CLAUDE.md`. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
+Commit `CLAUDE.md`. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
