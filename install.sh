@@ -20,11 +20,13 @@ link() {
   ln -s "$2" "$1"
 }
 
-backup="$claude_dir/backups/workflow-$(date +%Y%m%d-%H%M%S)"
+backup="$claude_dir/backups/shipyard-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup" "$claude_dir/skills"
 for f in "$settings" "$memory"; do [[ -f "$f" ]] && cp "$f" "$backup/"; done
 
-link "$claude_dir/workflow" "$src"
+# Older installs linked ~/.claude/workflow. Remove that link if it points here.
+if [[ -L "$claude_dir/workflow" && "$(readlink "$claude_dir/workflow")" == "$src" ]]; then rm "$claude_dir/workflow"; fi
+link "$claude_dir/shipyard" "$src"
 # Drop links to skills this repo no longer has, so renames don't leave dead skills behind.
 for l in "$claude_dir"/skills/*; do
   if [[ -L "$l" && "$(readlink "$l")" == "$src"/* && ! -e "$l" ]]; then rm "$l"; fi
@@ -37,12 +39,13 @@ link "$claude_dir/agents" "$src/agents"
 chmod +x "$src"/hooks/*.sh
 
 # The import sits between markers so a re-run replaces it instead of appending twice.
-block=$'<!-- workflow:begin -->\n@~/.claude/workflow/CLAUDE.md\n<!-- workflow:end -->'
+# Older installs used workflow markers, so match both and write the shipyard ones.
+block=$'<!-- shipyard:begin -->\n@~/.claude/shipyard/CLAUDE.md\n<!-- shipyard:end -->'
 touch "$memory"
-if grep -q '<!-- workflow:begin -->' "$memory"; then
+if grep -qE '<!-- (shipyard|workflow):begin -->' "$memory"; then
   BLOCK="$block" awk '
-    /<!-- workflow:begin -->/ { print ENVIRON["BLOCK"]; skip = 1; next }
-    /<!-- workflow:end -->/ { skip = 0; next }
+    /<!-- (shipyard|workflow):begin -->/ { print ENVIRON["BLOCK"]; skip = 1; next }
+    /<!-- (shipyard|workflow):end -->/ { skip = 0; next }
     !skip
   ' "$memory" >"$memory.tmp"
 else
@@ -52,7 +55,7 @@ mv "$memory.tmp" "$memory"
 
 # Dependency installs ask first. Pushing is denied, and the no-push hook catches what deny rules miss.
 [[ -f "$settings" ]] || echo '{}' >"$settings"
-jq --slurpfile rules "$src/permissions.json" --arg hooks "$claude_dir/workflow/hooks" '
+jq --slurpfile rules "$src/permissions.json" --arg hooks "$claude_dir/shipyard/hooks" '
   def hook($matcher; $script): {matcher: $matcher, hooks: [{type: "command", command: "bash \"\($hooks)/\($script)\""}]};
   .permissions.ask = ((.permissions.ask // []) as $e | $e + ($rules[0].ask - $e))
   | .permissions.deny = ((.permissions.deny // []) as $e | $e + ($rules[0].deny - $e))

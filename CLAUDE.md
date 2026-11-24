@@ -8,7 +8,7 @@ A Claude Code workflow: skills, two reviewer subagents, hooks and core rules tha
 - Try an installer without touching the real config: pass a temp dir, `install.ps1 -ClaudeDir <dir>` or `install.sh <dir>`. Run it twice to check re-runs. On Windows, remove the temp junctions with `cmd /c rmdir` before deleting the dir.
 
 ## Where things live
-- `claude/`: everything that gets installed. `~/.claude/workflow` links here.
+- `claude/`: everything that gets installed. `~/.claude/shipyard` links here.
 - `claude/skills/<name>/SKILL.md`: one folder per skill. `claude/agents/`: `spec-reviewer` and `quality-reviewer`, run in parallel by `review`.
 - `claude/hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
 - `claude/permissions.json`: `ask` and `deny` rules both installers add.

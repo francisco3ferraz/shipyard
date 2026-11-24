@@ -297,7 +297,7 @@ Rules live in `*.patterns` and test cases in `*.cases.json`. Both OSes share the
 
 **Skills don't show up after `/`.** Re-run the installer and restart Claude Code. Check that `~/.claude/skills/<name>` is a link into this repo.
 
-**Rules don't seem to apply.** Check `~/.claude/CLAUDE.md` contains `@~/.claude/workflow/CLAUDE.md` between the `workflow` markers.
+**Rules don't seem to apply.** Check `~/.claude/CLAUDE.md` contains `@~/.claude/shipyard/CLAUDE.md` between the `shipyard` markers.
 
 **A hook blocks something legitimate.** Add a case for the false alarm to its `.cases.json`, fix the pattern in its `.patterns` file, then run the tests.
 
@@ -305,7 +305,7 @@ Rules live in `*.patterns` and test cases in `*.cases.json`. Both OSes share the
 
 **You moved this repo.** The links break. Remove the old links in `~/.claude` and `~/.claude/skills` with `cmd /c rmdir <path>` on Windows or `rm <path>` on Linux, then re-run the installer.
 
-**Uninstall.** Remove the links the same way, delete the workflow block from `~/.claude/CLAUDE.md`, and restore `settings.json` from `~/.claude/backups`.
+**Uninstall.** Remove the links the same way, delete the shipyard block from `~/.claude/CLAUDE.md`, and restore `settings.json` from `~/.claude/backups`.
 
 ## 10. Cheat sheet
 

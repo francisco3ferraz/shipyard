@@ -12,19 +12,19 @@ Write it as one rule. Lead with what to do. Make it concrete. Add the why when i
 > Return early on invalid input instead of nesting the main path in an else. Flat code reads top to bottom.
 
 ## 2. Pick its home
-Workflow files live in `~/.claude/workflow/`, which links to the workflow git repo.
+Shipyard files live in `~/.claude/shipyard/`, which links to the Shipyard git repo.
 
 | The lesson is about | Home |
 |---|---|
 | This project only | The project `CLAUDE.md` |
-| One language or framework | `~/.claude/workflow/conventions/<name>.md`, in the matching section |
-| Any code anywhere | `~/.claude/workflow/CLAUDE.md` |
-| How a workflow step runs | That skill's `SKILL.md` |
-| Something review should have caught | `~/.claude/workflow/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
+| One language or framework | `~/.claude/shipyard/conventions/<name>.md`, in the matching section |
+| Any code anywhere | `~/.claude/shipyard/CLAUDE.md` |
+| How a Shipyard step runs | That skill's `SKILL.md` |
+| Something review should have caught | `~/.claude/shipyard/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
 
 In a conventions doc, end the rule with `(lesson)` so `/add-language` keeps it on refresh.
 
-If a regex can catch it with no false alarms, also add a rule to `~/.claude/workflow/hooks/guard.patterns`, and a blocked and an allowed case to `guard.cases.json` beside it. Both the Windows and Linux hooks read these files. Run `test.ps1` on Windows or `test.sh` on Linux.
+If a regex can catch it with no false alarms, also add a rule to `~/.claude/shipyard/hooks/guard.patterns`, and a blocked and an allowed case to `guard.cases.json` beside it. Both the Windows and Linux hooks read these files. Run `test.ps1` on Windows or `test.sh` on Linux.
 
 If a conventions doc for the language doesn't exist yet, suggest `/add-language`.
 
@@ -35,4 +35,4 @@ Read the target file. If a rule already covers the lesson, sharpen that rule ins
 Show me the exact edit. Apply it once I agree.
 
 ## 5. Report
-Name the file and line. If the edit is in the workflow repo, commit it there. Ask if I want the original code fixed now.
+Name the file and line. If the edit is in the Shipyard repo, commit it there. Ask if I want the original code fixed now.

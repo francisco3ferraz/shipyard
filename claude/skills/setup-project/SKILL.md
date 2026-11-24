@@ -20,7 +20,7 @@ Note the folders that matter and what each holds. Find where shared helpers and 
 ## 4. Read the patterns
 Read a few typical files and tests. Note only patterns that differ from common defaults or that a newcomer would get wrong: how errors flow, how tests are set up, what gets mocked, naming habits.
 
-List the languages and frameworks in use. Name the ones with no doc in `~/.claude/workflow/conventions/`, so I can run `/add-language`.
+List the languages and frameworks in use. Name the ones with no doc in `~/.claude/shipyard/conventions/`, so I can run `/add-language`.
 
 Where the code consistently differs from a conventions doc, the code wins. Write the code's pattern into `CLAUDE.md` and list the difference for the hand-off. Don't ask me about it.
 

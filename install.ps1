@@ -15,13 +15,16 @@ function Set-Link($link, $target) {
     New-Item -ItemType Junction -Path $link -Target $target | Out-Null
 }
 
-$backup = Join-Path $ClaudeDir ('backups\workflow-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+$backup = Join-Path $ClaudeDir ('backups\shipyard-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Force $backup | Out-Null
 foreach ($f in $settingsPath, $memoryPath) {
     if (Test-Path $f) { Copy-Item $f $backup }
 }
 
-Set-Link (Join-Path $ClaudeDir 'workflow') $src
+# Older installs linked ~/.claude/workflow. Remove that link if it points here.
+$oldLink = Get-Item -LiteralPath (Join-Path $ClaudeDir 'workflow') -Force -ErrorAction SilentlyContinue
+if ($oldLink -and $oldLink.LinkType -eq 'Junction' -and $oldLink.Target -contains $src) { cmd /c rmdir "$($oldLink.FullName)" }
+Set-Link (Join-Path $ClaudeDir 'shipyard') $src
 New-Item -ItemType Directory -Force (Join-Path $ClaudeDir 'skills') | Out-Null
 # Drop links to skills this repo no longer has, so renames don't leave dead skills behind.
 foreach ($link in Get-ChildItem (Join-Path $ClaudeDir 'skills') | Where-Object { $_.LinkType -eq 'Junction' }) {
@@ -34,11 +37,10 @@ foreach ($skill in Get-ChildItem -Directory (Join-Path $src 'skills')) {
 Set-Link (Join-Path $ClaudeDir 'agents') (Join-Path $src 'agents')
 
 # The import sits between markers so a re-run replaces it instead of appending twice.
-$begin = '<!-- workflow:begin -->'
-$end = '<!-- workflow:end -->'
-$block = "$begin`n@~/.claude/workflow/CLAUDE.md`n$end"
+# Older installs used workflow markers, so match both and write the shipyard ones.
+$block = "<!-- shipyard:begin -->`n@~/.claude/shipyard/CLAUDE.md`n<!-- shipyard:end -->"
 $memory = if (Test-Path $memoryPath) { [IO.File]::ReadAllText($memoryPath) } else { '' }
-$pattern = [regex]::Escape($begin) + '[\s\S]*?' + [regex]::Escape($end)
+$pattern = '<!-- (shipyard|workflow):begin -->[\s\S]*?<!-- (shipyard|workflow):end -->'
 if ($memory -match $pattern) {
     $memory = [regex]::Replace($memory, $pattern, { param($m) $block })
 } else {
@@ -60,7 +62,7 @@ foreach ($kind in 'ask', 'deny') {
 }
 
 function New-Hook($matcher, $script) {
-    $path = (Join-Path $ClaudeDir "workflow\hooks\$script") -replace '\\', '/'
+    $path = (Join-Path $ClaudeDir "shipyard\hooks\$script") -replace '\\', '/'
     [pscustomobject]@{
         matcher = $matcher
         hooks   = @([pscustomobject]@{ type = 'command'; command = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$path`"" })

@@ -91,8 +91,8 @@ bash install.sh                                         # Linux, needs jq, git a
 
 Both installers do the same thing. Each backs up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then it:
 
-- Links `~/.claude/workflow` to `claude/`, and each skill and the `agents` folder into `~/.claude`
-- Adds `@~/.claude/workflow/CLAUDE.md` to your `~/.claude/CLAUDE.md`
+- Links `~/.claude/shipyard` to `claude/`, and each skill and the `agents` folder into `~/.claude`
+- Adds `@~/.claude/shipyard/CLAUDE.md` to your `~/.claude/CLAUDE.md`
 - Adds both hooks, `deny` rules for pushing, and `ask` rules for dependency installs and manifest edits
 
 Links mean `/retrospective` and `/add-language` edit this repo directly. Commit their changes here. Restart Claude Code after installing.
