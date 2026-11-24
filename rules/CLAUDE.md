@@ -10,7 +10,7 @@
 - Add an abstraction (class, interface, wrapper, factory, generic, config option) only when two real callers need it now.
 - Keep related logic together. One clear place per behavior.
 - Names use the domain's words and say what a thing is or does. One concept, one name, everywhere.
-- Comments say only what the code can't: why, business rules, workarounds, non-obvious constraints. One line when possible. Never narrate the code or restate a signature.
+- Comments say only what the code can't: why, business rules, workarounds, non-obvious constraints. One line when possible. Never narrate the code or restate a signature. A non-obvious rule or workaround always gets its why.
 
 ## Errors
 - Fail loudly. Let errors propagate unless this exact spot can really handle them.

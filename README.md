@@ -20,7 +20,7 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
 2. **`/to-spec`** writes down the decisions. Every behavior gets a concrete example, which later becomes a test.
 3. **`/to-tickets`** splits a spec that's too big for one session into slices that can each be built and verified alone.
 4. **`/implement`** builds a spec, ticket or task test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes the findings and commits.
-5. **`review`** runs two subagents in parallel. `spec-reviewer` checks the change against what was asked. `quality-reviewer` checks how it's written. Keeping them apart stops a clean diff from hiding a missing behavior, and the other way round.
+5. **`review`** runs two subagents in parallel. `spec-reviewer` checks the change against what was asked. `quality-reviewer` holds it against the core rules and the project `CLAUDE.md`. Keeping them apart stops a clean diff from hiding a missing behavior, and the other way round.
 6. **`/retrospective`** turns a correction, or a whole session, into fixes to the setup. Each fix goes in the strongest home that can carry it, preferring checks over lines in a `CLAUDE.md`.
 7. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't learn from the code.
 
@@ -42,12 +42,12 @@ Agents never push. `deny` rules and the `no-push` hook block it.
 
 | Problem | Handled by |
 |---|---|
-| Hard to read | Core rules, the refactor step, quality check 1 |
-| Too many comments | Core rules, quality check 2 |
-| Duplicated logic | Searching before writing, the refactor step, quality check 3 |
-| Over-engineering | Core rules, the interview asks for the smallest version, quality check 4 |
-| Low-value tests | Spec examples become expected values, passing tests are frozen, the `guard` hook, quality check 5 |
-| Hidden failures | Core rules, the `guard` hook, every error case in the spec, quality check 6 |
+| Hard to read | Core rules, the refactor step, the quality reviewer |
+| Too many comments | Core rules, the quality reviewer |
+| Duplicated logic | Searching before writing, the refactor step, the quality reviewer's grep for existing helpers |
+| Over-engineering | Core rules, the interview asks for the smallest version, the quality reviewer |
+| Low-value tests | Spec examples become expected values, passing tests are frozen, the `guard` hook, the quality reviewer |
+| Hidden failures | Core rules, the `guard` hook, every error case in the spec, the quality reviewer |
 | Scope creep, unverified work | The spec reviewer flags unasked changes, dependency installs need approval, the verify step |
 
 ## Layout
