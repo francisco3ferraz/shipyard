@@ -53,11 +53,13 @@ fi
 mv "$memory.tmp" "$memory"
 
 # Dependency installs ask first. Pushing is denied, and the no-push hook catches what deny rules miss.
+# Commits and PRs carry no Claude attribution. Empty strings, since builds before 2.1.281 reject the whole file on `false`.
 [[ -f "$settings" ]] || echo '{}' >"$settings"
 jq --slurpfile rules "$here/permissions.json" --arg hooks "$claude_dir/shipyard/hooks" '
   def hook($matcher; $script): {matcher: $matcher, hooks: [{type: "command", command: "bash \"\($hooks)/\($script)\""}]};
   .permissions.ask = ((.permissions.ask // []) as $e | $e + ($rules[0].ask - $e))
   | .permissions.deny = ((.permissions.deny // []) as $e | $e + ($rules[0].deny - $e))
+  | .attribution = ((.attribution // {}) + {commit: "", pr: ""})
   | .hooks.PreToolUse = ([(.hooks.PreToolUse // [])[] | select(any(.hooks[]?; .command | test("(guard|no-push)\\.(ps1|sh)")) | not)]
       + [hook("Write|Edit|MultiEdit"; "guard.sh"), hook("Bash"; "no-push.sh")])
 ' "$settings" >"$settings.tmp"

@@ -58,6 +58,11 @@ foreach ($kind in 'ask', 'deny') {
     Set-Prop $settings.permissions $kind @($existing + ($rules.$kind | Where-Object { $existing -notcontains $_ }))
 }
 
+# Commits and PRs carry no Claude attribution. Empty strings, since builds before 2.1.281 reject the whole file on `false`.
+if (-not $settings.PSObject.Properties['attribution']) { Set-Prop $settings 'attribution' (New-Object PSObject) }
+Set-Prop $settings.attribution 'commit' ''
+Set-Prop $settings.attribution 'pr' ''
+
 function New-Hook($matcher, $script) {
     $path = (Join-Path $ClaudeDir "shipyard\hooks\$script") -replace '\\', '/'
     [pscustomobject]@{

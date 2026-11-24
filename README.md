@@ -78,7 +78,7 @@ powershell -ExecutionPolicy Bypass -File install/install.ps1   # Windows
 bash install/install.sh                                       # Linux, needs jq, git and GNU grep
 ```
 
-Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to this repo, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules.
+Both back up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then they link `~/.claude/shipyard` to this repo, link each skill and the agents into `~/.claude`, import the core rules into `~/.claude/CLAUDE.md`, and add the hooks and permission rules. They also turn off the Claude attribution lines in commits and PRs.
 
 The install links rather than copies, so `/retrospective` edits this repo directly and every session sees the change. Restart Claude Code after installing.
 
