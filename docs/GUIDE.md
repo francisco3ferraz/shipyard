@@ -33,7 +33,7 @@ Re-run the installer whenever a skill is added, renamed or removed. It's safe to
 ### Existing code
 
 1. `/setup-project` at the repo root. It runs the build, lint and test commands, maps the layout, and asks one round of questions the code can't answer. Each question shows what the code does now and why it matters. "Don't know" is a valid answer for anyone new to the codebase: it keeps the current behavior and lists the question to ask a teammate.
-2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It always asks whether `CLAUDE.md` and the specs are committed or stay local. Local files go in `.git/info/exclude`, which keeps them out of git without touching `.gitignore`. Files git already tracks need `git rm --cached` first, and it asks before running that. Otherwise it commits the file once approved.
+2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It always asks whether `CLAUDE.md` and the specs are committed or stay local. Local files go in `.git/info/exclude`, which keeps them out of git without touching `.gitignore`. Files git already tracks need `git rm --cached` first, and it asks before running that. Otherwise it commits `CLAUDE.md` once approved, then any specs not yet committed in their own commit.
 
 Then work through its hand-off list:
 
@@ -76,7 +76,7 @@ It looks things up in the code first, then asks in rounds through Claude Code's 
 
 ### `/to-spec`
 
-Same session, right after the interview. It writes `docs/specs/<slug>/spec.md` from the decisions without asking anything new. If a decision is missing, it says so and stops.
+Same session, right after the interview. It writes `docs/specs/<slug>/spec.md` from the decisions without asking anything new. If a decision is missing, it says so and stops. It commits the spec only if the project `CLAUDE.md` says specs are committed.
 
 The spec is the cheapest place to catch a mistake. Check that:
 

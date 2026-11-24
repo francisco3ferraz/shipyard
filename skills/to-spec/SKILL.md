@@ -43,7 +43,7 @@ The seams tests go through, what gets mocked and why, and existing tests to copy
 Every behavior and edge case must be testable and carry a concrete example. They are the acceptance criteria.
 
 ## 3. Hand off
-Show me the spec for review. Once I approve, set `Status: approved`.
+Show me the spec for review. Once I approve, set `Status: approved`. Commit it only if the project `CLAUDE.md` says specs are committed.
 
 Then judge its size. If one session can build and verify it all, suggest `/implement <spec path>`. Otherwise, or if the repo has no code yet, suggest `/to-tickets <spec path>`.
 

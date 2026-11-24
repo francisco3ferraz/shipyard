@@ -41,7 +41,7 @@ The behavior that works after this ticket, from the user's side.
 - [ ] Behavior N from the spec, restated with its example
 ```
 
-Add a `## Tickets` list to the spec linking each one.
+Add a `## Tickets` list to the spec linking each one. Commit the tickets only if the project `CLAUDE.md` says specs are committed.
 
 ## 5. Hand off
 Name the first command to run, for example `/implement docs/specs/<slug>/01-<slug>.md`.

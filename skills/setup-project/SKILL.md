@@ -15,7 +15,7 @@ Read the manifests, scripts, CI config, linter and test config, `README`, `CONTR
 Find the commands for build or typecheck, lint, all tests, one test file, and running locally. Run each one except running locally. Record only the commands that worked. List the ones that failed, with their error.
 
 ## 3. Map
-Note the folders that matter and what each holds. Find where shared helpers and test fixtures live. Use the project's specs folder if it has one. Otherwise use `docs/specs/`.
+Note the folders that matter and what each holds. Find where test fixtures live. Use the project's specs folder if it has one. Otherwise use `docs/specs/`.
 
 ## 4. Read the patterns
 Read a few typical files and tests. Note only patterns that differ from common defaults or that a newcomer would get wrong: how errors flow, how tests are set up, what gets mocked, naming habits.
@@ -45,4 +45,4 @@ Report:
 - Questions I couldn't answer, to ask a teammate
 - Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
 
-Commit `CLAUDE.md` unless I chose local. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
+Unless I chose local, commit `CLAUDE.md`, then any uncommitted specs in their own commit. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
