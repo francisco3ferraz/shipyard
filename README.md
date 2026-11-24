@@ -12,7 +12,7 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
 /interview-me <idea> → /to-spec → [/to-tickets <spec>] → /implement <ticket> → review → commit → push
                                                          ↑                                 │
                                                          └────────── next ticket ──────────┘
-/retrospective         after correcting the agent
+/retrospective         after a correction or a rough session
 /setup-project         once per repo, again when it drifts
 ```
 
@@ -21,7 +21,7 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
 3. **`/to-tickets`** splits a spec that's too big for one session into slices that can each be built and verified alone.
 4. **`/implement`** builds a spec, ticket or task test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes the findings and commits.
 5. **`review`** runs two subagents in parallel. `spec-reviewer` checks the change against what was asked. `quality-reviewer` checks how it's written. Keeping them apart stops a clean diff from hiding a missing behavior, and the other way round.
-6. **`/retrospective`** turns a correction into one rule and files it where it belongs, so it only needs saying once.
+6. **`/retrospective`** turns a correction, or a whole session, into fixes to the setup. Each fix goes in the strongest home that can carry it, preferring checks over lines in a `CLAUDE.md`.
 7. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't learn from the code.
 
 Human decisions happen at five points: the interview answers, the spec, the ticket split, the commits, and the push.
@@ -93,7 +93,7 @@ Plugins with overlapping skills, like `mattpocock-skills` with its `tdd`, `grill
 
 ## Sources
 
-- [Matt Pocock's skills](https://github.com/mattpocock/skills), the starting point for the interview, spec, tickets, TDD and two-axis review
+- [Matt Pocock's skills](https://github.com/mattpocock/skills), the starting point for the interview, spec, tickets, TDD, two-axis review and retrospective
 - [Claude Code workflow best practices that ship code](https://dev.to/galian/claude-code-workflow-best-practices-that-ship-code-na)
 - [Claude Code hooks and subagents guide 2026](https://dev.to/vibehackers/claude-code-hooks-subagents-power-features-the-complete-guide-2026-c71)
 - [Claude Code advanced best practices 2026](https://smartscope.blog/en/generative-ai/claude/claude-code-best-practices-advanced-2026/)

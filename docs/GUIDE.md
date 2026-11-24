@@ -158,18 +158,9 @@ The plan had two tests through a real `Store` in a temp dir: `Food` is saved as 
 
 ## Corrections
 
-A correction should only be needed once. Run `/retrospective` right after correcting the agent. It also kicks in on phrases like "never do that again".
+A correction should only be needed once. Run `/retrospective` right after correcting the agent, or at the end of a rough session. It also kicks in on phrases like "never do that again".
 
-It works out what happened, what's wanted instead and why, writes one concrete rule, and files it:
-
-| The lesson is about | It goes in |
-|---|---|
-| This project only | The project `CLAUDE.md` |
-| Any code anywhere, or one language | `rules/CLAUDE.md`. The rule names the language if it has one. |
-| How a skill runs | That skill's `SKILL.md` |
-| Something review missed | The matching reviewer in `agents/`, plus the rule's own home |
-
-If a regex can catch the mistake reliably, it also goes in `hooks/guard.patterns` with test cases. The edit is shown before it's applied, then committed in this repo.
+Given a correction, it works on that. Otherwise it reads the whole session for corrections, rework, review findings and wasted tool calls. It fixes the setup, not the code, and picks the strongest home for each fix, as laid out in [the skill](../skills/retrospective/SKILL.md). Each edit is shown before it's applied, then committed in this repo.
 
 Concrete rules work, vague ones don't:
 
@@ -198,7 +189,7 @@ bash hooks/test.sh                                         # Linux
 
 Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. Edit those, not the scripts.
 
-**Repeated review findings** mean a rule belongs earlier: in a `CLAUDE.md` or the linter.
+**Repeated review findings** that a regex or linter could catch belong in a hook or the linter. Run `/retrospective`.
 
 ## Fixing the setup
 
@@ -224,5 +215,5 @@ Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. Edit
 | `/to-tickets <spec>` | When the spec needs more than one session |
 | `/implement <spec, ticket or task>` | Fresh session per ticket |
 | `/review [spec] [base ref]` | Any diff, any time |
-| `/retrospective` | Right after a correction |
+| `/retrospective` | Right after a correction, or after a rough session |
 | `! git push` | Pushing stays manual |
