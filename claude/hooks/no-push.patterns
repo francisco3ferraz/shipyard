@@ -1,0 +1,7 @@
+# One rule per line: label<TAB>regex. Matching ignores case. Read by no-push.ps1 and no-push.sh.
+pushes with git	\bgit(\s+-\S+(\s+[^-\s]\S*)?)*\s+push\b
+creates or merges on GitHub	\bgh\s+(pr\s+(create|merge)|release\s+create|repo\s+(create|sync))\b
+publishes a package	\b(npm|pnpm|yarn|bun|cargo|poetry)\s+publish\b
+pushes an image	\b(docker|podman)\s+push\b
+uploads to PyPI	\btwine\s+upload\b
+pushes to NuGet	\bnuget\s+push\b

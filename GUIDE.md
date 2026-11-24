@@ -1,6 +1,6 @@
-# Usage guide
+# Shipyard usage guide
 
-How to use this workflow day to day. For what's in the repo and why, see the [README](README.md).
+How to use Shipyard day to day. For what's in the repo and why, see the [README](README.md).
 
 ## Contents
 
@@ -22,9 +22,14 @@ How to use this workflow day to day. For what's in the repo and why, see the [RE
 Do this once per machine.
 
 1. Clone this repo somewhere permanent. The installer links to it, so don't move it later.
-2. Run the installer:
+2. Run the installer for your OS:
    ```powershell
+   # Windows
    powershell -ExecutionPolicy Bypass -File install.ps1
+   ```
+   ```bash
+   # Linux. Needs jq, git and GNU grep.
+   bash install.sh
    ```
 3. In Claude Code, open `/plugin` and disable any plugin whose skills overlap, like `mattpocock-skills`.
 4. Restart Claude Code.
@@ -37,7 +42,23 @@ Re-run the installer any time you add, rename or remove a skill. It's safe to ru
 
 Do this once per repo, before the first feature.
 
-### `/setup-project`
+### Starting from scratch
+
+`/setup-project` needs code to read, so an empty repo starts with a **walking skeleton**: the thinnest version that builds, lints, tests and runs one trivial behavior end to end.
+
+1. `git init` an empty folder and open Claude Code there.
+2. `/interview-me <what you want to build>`. It also asks about stack, storage and how it runs. Pick the boring option unless you have a reason.
+3. `/add-language` for the stack you chose, so the skeleton follows its conventions from line one.
+4. `/to-spec`, then `/to-tickets`. Ticket 01 is always the walking skeleton.
+5. `/implement` ticket 01 in a fresh session. Commit it.
+6. `/setup-project`. Now it has real commands to verify and a layout to map.
+7. Carry on with ticket 02 as usual.
+
+Keep the skeleton tiny. Its job is to prove the commands work, not to start the features.
+
+### Existing project
+
+#### `/setup-project`
 
 Run it at the repo root. It:
 
@@ -56,7 +77,7 @@ At the end it reports failed commands, missing conventions docs and linter rules
 
 Commit the `CLAUDE.md`.
 
-### `/add-language <name> [version]`
+#### `/add-language <name> [version]`
 
 Run it once per language or framework, for example `/add-language python 3.13` or `/add-language react 19`. It searches official docs and tool docs, keeps only rules that change the code an agent writes, and saves `claude/conventions/<name>.md` in this repo.
 
@@ -74,6 +95,7 @@ Not every task needs the full loop. Match the effort to the size.
 | Small bug or change in one or two files | `/implement <describe the task>` |
 | A feature you can describe in a few sentences | `/interview-me` → `/to-spec` → `/implement <spec>` |
 | A feature that spans layers or several sessions | `/interview-me` → `/to-spec` → `/to-tickets` → `/implement` per ticket |
+| A brand-new project | See [Starting from scratch](#starting-from-scratch) |
 | Reviewing any diff, branch or PR | `/review [spec path] [base ref]` |
 
 When in doubt, start with `/interview-me`. If it finds nothing to ask, the task really is small.
@@ -230,7 +252,7 @@ It will:
 | Something review missed | `claude/agents/reviewer.md`, plus the rule's own home |
 
 4. Show you the exact edit and apply it once you agree.
-5. If a regex can catch the mistake reliably, add it to `guard.ps1` with a test.
+5. If a regex can catch the mistake reliably, add it to `guard.patterns` with test cases.
 
 Edits to `claude/` land in this repo, because of the links. Commit them here.
 
@@ -252,23 +274,25 @@ Good lessons are concrete:
 **Test the hooks after editing them:**
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File claude\hooks\guard.tests.ps1
-powershell -ExecutionPolicy Bypass -File claude\hooks\no-push.tests.ps1
+powershell -ExecutionPolicy Bypass -File claude\hooks\test.ps1   # Windows
+bash claude/hooks/test.sh                                         # Linux
 ```
+
+Rules live in `*.patterns` and test cases in `*.cases.json`. Both OSes share them, so edit those, not the scripts.
 
 **Watch the review findings.** If the reviewer keeps flagging the same thing, the rule belongs earlier: in `CLAUDE.md`, a conventions doc, or the linter.
 
 ## 9. Troubleshooting
 
-**Skills don't show up after `/`.** Re-run `install.ps1` and restart Claude Code. Check that `~/.claude/skills/<name>` is a link into this repo.
+**Skills don't show up after `/`.** Re-run the installer and restart Claude Code. Check that `~/.claude/skills/<name>` is a link into this repo.
 
 **Rules don't seem to apply.** Check `~/.claude/CLAUDE.md` contains `@~/.claude/workflow/CLAUDE.md` between the `workflow` markers.
 
-**A hook blocks something legitimate.** Run its test file, add a case for the false alarm, then fix the pattern.
+**A hook blocks something legitimate.** Add a case for the false alarm to its `.cases.json`, fix the pattern in its `.patterns` file, then run the tests.
 
 **Two skills compete,** for example a plugin's `code-review` and this `review`. Disable the plugin in `/plugin`.
 
-**You moved this repo.** The links break. Remove the old links in `~/.claude` and `~/.claude/skills` with `cmd /c rmdir <path>`, then re-run the installer.
+**You moved this repo.** The links break. Remove the old links in `~/.claude` and `~/.claude/skills` with `cmd /c rmdir <path>` on Windows or `rm <path>` on Linux, then re-run the installer.
 
 **Uninstall.** Remove the links the same way, delete the workflow block from `~/.claude/CLAUDE.md`, and restore `settings.json` from `~/.claude/backups`.
 

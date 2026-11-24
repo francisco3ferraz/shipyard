@@ -1,0 +1,7 @@
+# One rule per line: label<TAB>regex. Matching ignores case. Read by guard.ps1 and guard.sh.
+skips or focuses a test	\b(it|test|describe|context)\.(skip|only|todo)\(|(?<![\w.])(xit|xtest|xdescribe|fdescribe)\(|@pytest\.mark\.(skip|xfail)|pytest\.skip\(|@unittest\.skip|@(Disabled|Ignore)\b|#\[ignore\]|\bt\.Skip(f|Now)?\(
+has an empty catch	catch\s*(\([^)]*\))?\s*\{\s*\}
+has a bare except	\bexcept\s*:
+swallows an exception with pass	\bexcept\b[^\n:]*:\s*(pass|\.\.\.)\s*(\n|$)
+swallows a promise rejection	\.catch\(\s*\(?\s*\w*\s*\)?\s*=>\s*(\{\s*\}|null|undefined)\s*\)
+returns a fallback from a catch	catch\s*(\([^)]*\))?\s*\{\s*return\s*(null|undefined|\[\]|\{\}|false|''|"")?\s*;?\s*\}

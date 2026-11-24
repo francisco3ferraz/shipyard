@@ -1,0 +1,12 @@
+{
+  "ask": [
+    "Bash(npm install:*)", "Bash(npm i:*)", "Bash(pnpm add:*)", "Bash(yarn add:*)", "Bash(bun add:*)",
+    "Bash(pip install:*)", "Bash(uv add:*)", "Bash(uv pip install:*)", "Bash(poetry add:*)",
+    "Bash(cargo add:*)", "Bash(go get:*)", "Bash(dotnet add:*)",
+    "Edit(**/package.json)", "Edit(**/pyproject.toml)", "Edit(**/requirements*.txt)",
+    "Edit(**/go.mod)", "Edit(**/Cargo.toml)", "Edit(**/*.csproj)"
+  ],
+  "deny": [
+    "Bash(git push:*)", "Bash(gh pr create:*)", "Bash(gh pr merge:*)", "Bash(npm publish:*)"
+  ]
+}

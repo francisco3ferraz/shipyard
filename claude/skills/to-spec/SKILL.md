@@ -45,4 +45,4 @@ Every behavior and edge case must be testable and carry a concrete example. They
 ## 3. Hand off
 Show me the spec for review. Once I approve, set `Status: approved`.
 
-Then judge its size. If one session can build and verify it all, suggest `/implement <spec path>`. Otherwise suggest `/to-tickets <spec path>`.
+Then judge its size. If one session can build and verify it all, suggest `/implement <spec path>`. Otherwise, or if the repo has no code yet, suggest `/to-tickets <spec path>`.

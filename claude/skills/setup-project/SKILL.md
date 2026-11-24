@@ -7,6 +7,8 @@ disable-model-invocation: true
 A project `CLAUDE.md` loads in every session, so every line costs attention. It holds only what an agent can't find by looking: verified commands, where things live, this codebase's own patterns, and gotchas. Everything else stays in the code and config, where it can't go stale.
 
 ## 1. Survey
+If the repo has no code yet, stop. Tell me to build the walking skeleton first: `/interview-me`, `/to-spec`, `/to-tickets`, then `/implement` ticket 01. Run this skill after that.
+
 Read the manifests, scripts, CI config, linter and test config, `README`, `CONTRIBUTING`, the top-level layout and the last 20 commit messages. If a `CLAUDE.md` or `AGENTS.md` already exists, this is a refresh. Keep what is still true and cut the rest.
 
 ## 2. Verify the commands

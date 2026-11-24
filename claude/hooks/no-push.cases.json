@@ -1,0 +1,15 @@
+[
+  { "blocked": true, "command": "git push" },
+  { "blocked": true, "command": "git push origin main --force" },
+  { "blocked": true, "command": "git -C ../app push" },
+  { "blocked": true, "command": "git add . && git commit -m \"x\" && git push" },
+  { "blocked": true, "command": "gh pr create --fill" },
+  { "blocked": true, "command": "gh pr merge 12" },
+  { "blocked": true, "command": "npm publish" },
+  { "blocked": true, "command": "docker push app:latest" },
+  { "blocked": false, "command": "git status" },
+  { "blocked": false, "command": "git commit -m \"Prepare push of invoices\"" },
+  { "blocked": false, "command": "git stash push -m wip" },
+  { "blocked": false, "command": "gh pr view 12" },
+  { "blocked": false, "command": "git log origin/main..HEAD" }
+]

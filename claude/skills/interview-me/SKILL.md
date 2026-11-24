@@ -27,6 +27,7 @@ Recommend: <your answer and the one-line reason>
 - Failure: what can go wrong, how it shows, who notices
 - Decisions I haven't made but the code will force
 - Scope: the smallest version that is still worth building
+- For a new project, also: who uses it and how, language and framework, storage, how it runs and ships. Recommend the boring, well-known option.
 
 Push back when an answer conflicts with an earlier one, adds complexity without a real need, or is vague. Propose the simpler option when one exists.
 

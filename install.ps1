@@ -1,4 +1,4 @@
-# Links the workflow into your user-level Claude Code config. Safe to re-run.
+# Links Shipyard into your user-level Claude Code config. Safe to re-run.
 # Links, not copies, so /retrospective and /add-language edit this repo directly.
 param([string]$ClaudeDir = (Join-Path $HOME '.claude'))
 
@@ -51,22 +51,13 @@ function Set-Prop($obj, $name, $value) {
     if ($obj.PSObject.Properties[$name]) { $obj.$name = $value } else { $obj | Add-Member -NotePropertyName $name -NotePropertyValue $value }
 }
 
-# New dependencies need your approval.
-$askRules = @(
-    'Bash(npm install:*)', 'Bash(npm i:*)', 'Bash(pnpm add:*)', 'Bash(yarn add:*)', 'Bash(bun add:*)',
-    'Bash(pip install:*)', 'Bash(uv add:*)', 'Bash(uv pip install:*)', 'Bash(poetry add:*)',
-    'Bash(cargo add:*)', 'Bash(go get:*)', 'Bash(dotnet add:*)',
-    'Edit(**/package.json)', 'Edit(**/pyproject.toml)', 'Edit(**/requirements*.txt)',
-    'Edit(**/go.mod)', 'Edit(**/Cargo.toml)', 'Edit(**/*.csproj)'
-)
+# Dependency installs ask first. Pushing is denied, and the no-push hook catches what deny rules miss.
+$rules = [IO.File]::ReadAllText((Join-Path $src 'permissions.json')) | ConvertFrom-Json
 if (-not $settings.PSObject.Properties['permissions']) { Set-Prop $settings 'permissions' (New-Object PSObject) }
-$existingAsk = @($settings.permissions.ask | Where-Object { $_ })
-Set-Prop $settings.permissions 'ask' @($existingAsk + ($askRules | Where-Object { $existingAsk -notcontains $_ }))
-
-# Pushing stays yours. The hook also covers PowerShell and chained commands the deny rules miss.
-$denyRules = @('Bash(git push:*)', 'Bash(gh pr create:*)', 'Bash(gh pr merge:*)', 'Bash(npm publish:*)')
-$existingDeny = @($settings.permissions.deny | Where-Object { $_ })
-Set-Prop $settings.permissions 'deny' @($existingDeny + ($denyRules | Where-Object { $existingDeny -notcontains $_ }))
+foreach ($kind in 'ask', 'deny') {
+    $existing = @($settings.permissions.$kind | Where-Object { $_ })
+    Set-Prop $settings.permissions $kind @($existing + ($rules.$kind | Where-Object { $existing -notcontains $_ }))
+}
 
 function New-Hook($matcher, $script) {
     $path = (Join-Path $ClaudeDir "workflow\hooks\$script") -replace '\\', '/'
@@ -76,9 +67,9 @@ function New-Hook($matcher, $script) {
     }
 }
 if (-not $settings.PSObject.Properties['hooks']) { Set-Prop $settings 'hooks' (New-Object PSObject) }
-$others = @($settings.hooks.PreToolUse | Where-Object { $_ -and -not ($_.hooks.command -match '(guard|no-push)\.ps1') })
+$others = @($settings.hooks.PreToolUse | Where-Object { $_ -and -not ($_.hooks.command -match '(guard|no-push)\.(ps1|sh)') })
 Set-Prop $settings.hooks 'PreToolUse' @($others + (New-Hook 'Write|Edit|MultiEdit' 'guard.ps1') + (New-Hook 'Bash|PowerShell' 'no-push.ps1'))
 
 [IO.File]::WriteAllText($settingsPath, (ConvertTo-Json -InputObject $settings -Depth 20), $utf8)
 
-Write-Output "Linked into $ClaudeDir. Backup in $backup. Restart Claude Code."
+Write-Output "Shipyard linked into $ClaudeDir. Backup in $backup. Restart Claude Code."

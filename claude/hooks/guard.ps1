@@ -1,6 +1,7 @@
 # PreToolUse hook. Blocks new code that skips tests or swallows errors.
 # Exit 2 sends stderr back to Claude and cancels the edit.
 # A line containing "guard-ok: <reason>" is allowed, so real exceptions must state their why.
+# Rules live in guard.patterns, shared with guard.sh.
 
 $ErrorActionPreference = 'Stop'
 
@@ -9,8 +10,8 @@ $tool = $payload.tool_name
 $in = $payload.tool_input
 $path = [string]$in.file_path
 
-# Prose files quote these patterns legitimately.
-if ($path -match '\.(md|mdx|txt|rst)$') { exit 0 }
+# Prose quotes these patterns legitimately, and the rule and case files hold them on purpose.
+if ($path -match '\.(md|mdx|txt|rst|patterns)$|\.cases\.json$') { exit 0 }
 
 $old = ''
 $new = ''
@@ -35,17 +36,10 @@ $oldLines = [Collections.Generic.HashSet[string]]::new([string[]]($old -split "`
 $added = ($new -split "`r?`n" | Where-Object { -not $oldLines.Contains($_) -and $_ -notmatch 'guard-ok:' }) -join "`n"
 if (-not $added.Trim()) { exit 0 }
 
-$rules = [ordered]@{
-    'skips or focuses a test'           = '\b(it|test|describe|context)\.(skip|only|todo)\(|(?<![\w.])(xit|xtest|xdescribe|fdescribe)\(|@pytest\.mark\.(skip|xfail)|pytest\.skip\(|@unittest\.skip|@(Disabled|Ignore)\b|#\[ignore\]|\bt\.Skip(f|Now)?\('
-    'has an empty catch'                = 'catch\s*(\([^)]*\))?\s*\{\s*\}'
-    'has a bare except'                 = '\bexcept\s*:'
-    'swallows an exception with pass'   = '\bexcept\b[^\n:]*:\s*(pass|\.\.\.)\s*(\n|$)'
-    'swallows a promise rejection'      = '\.catch\(\s*\(?\s*\w*\s*\)?\s*=>\s*(\{\s*\}|null|undefined)\s*\)'
-    'returns a fallback from a catch'   = 'catch\s*(\([^)]*\))?\s*\{\s*return\s*(null|undefined|\[\]|\{\}|false|''''|"")?\s*;?\s*\}'
-}
-
-$hits = foreach ($rule in $rules.GetEnumerator()) {
-    if ($added -match $rule.Value) { "- $($rule.Key): $($Matches[0].Trim())" }
+$rules = Get-Content (Join-Path $PSScriptRoot 'guard.patterns') | Where-Object { $_ -and -not $_.StartsWith('#') }
+$hits = foreach ($rule in $rules) {
+    $label, $pattern = $rule -split "`t", 2
+    if ($added -match $pattern) { "- ${label}: $($Matches[0].Trim())" }
 }
 if (-not $hits) { exit 0 }
 

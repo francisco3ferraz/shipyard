@@ -15,6 +15,7 @@ A **slice** is one end-to-end path through every layer it needs, small enough fo
 
 - Each ticket is a vertical slice that works and can be verified on its own.
 - Prefactoring goes first, as its own ticket.
+- In an empty repo, ticket 01 is a **walking skeleton**: the project layout, working build, lint and test commands, and one trivial behavior running end to end with its test. Every other ticket is blocked by it.
 - Each ticket lists only the tickets that truly block it.
 - Every spec behavior and edge case lands in exactly one ticket.
 

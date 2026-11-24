@@ -24,7 +24,7 @@ Workflow files live in `~/.claude/workflow/`, which links to the workflow git re
 
 In a conventions doc, end the rule with `(lesson)` so `/add-language` keeps it on refresh.
 
-If a regex can catch it with no false alarms, also add a rule to `~/.claude/workflow/hooks/guard.ps1` and a case to `guard.tests.ps1` beside it. Run the tests.
+If a regex can catch it with no false alarms, also add a rule to `~/.claude/workflow/hooks/guard.patterns`, and a blocked and an allowed case to `guard.cases.json` beside it. Both the Windows and Linux hooks read these files. Run `test.ps1` on Windows or `test.sh` on Linux.
 
 If a conventions doc for the language doesn't exist yet, suggest `/add-language`.
 

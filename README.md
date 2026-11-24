@@ -1,6 +1,6 @@
-# Agentic Engineering workflow
+# Shipyard
 
-A Claude Code setup that pushes agents toward simple, reused, verified code, and learns from your corrections.
+A Claude Code workflow for shipping simple, reused, verified code with agents. It grills the idea, specs it, builds it test-first, reviews it, and learns from your corrections.
 
 New here? Read the [usage guide](GUIDE.md).
 
@@ -37,7 +37,7 @@ Provider drops ~1% of calls under load.
 
 An imperative subject under 50 characters, with no period. Add a body only when the why isn't obvious. One logical change per commit.
 
-Agents can never push or publish. `deny` rules block `git push`, `gh pr create` and `gh pr merge`. The `no-push.ps1` hook also catches chained commands, PowerShell, and `publish` commands. Run `git push` yourself with `! git push`.
+Agents can never push or publish. `deny` rules block `git push`, `gh pr create` and `gh pr merge`. The `no-push` hook also catches chained commands, PowerShell, and `publish` commands. Run `git push` yourself with `! git push`.
 
 ## What blocks each problem
 
@@ -47,8 +47,8 @@ Agents can never push or publish. `deny` rules block `git push`, `gh pr create` 
 | Too many comments | Core rules, reviewer check 2 |
 | Duplicated logic | Explore step, refactor step, reviewer greps for existing helpers |
 | Over-engineering | Core rules, `/interview-me` pushes for the smallest version, reviewer check 4 |
-| Low-value tests | Spec examples become expected values, frozen tests, `guard.ps1`, reviewer check 5 |
-| Hidden failures | Core rules, `guard.ps1`, spec lists every error case, reviewer check 6 |
+| Low-value tests | Spec examples become expected values, frozen tests, `guard` hook, reviewer check 5 |
+| Hidden failures | Core rules, `guard` hook, spec lists every error case, reviewer check 6 |
 | Scope creep, unverified | Spec axis flags unrequested behavior, dependency installs ask you, verify step |
 
 ## Files
@@ -59,10 +59,12 @@ Agents can never push or publish. `deny` rules block `git push`, `gh pr create` 
 | [claude/skills/](claude/skills/) | `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `add-language`, `setup-project` |
 | [claude/agents/reviewer.md](claude/agents/reviewer.md) | Read-only two-axis reviewer |
 | [claude/conventions/](claude/conventions/) | One doc per language or framework, from `/add-language` |
-| [claude/hooks/guard.ps1](claude/hooks/guard.ps1) | Blocks edits that skip tests or swallow errors |
-| [claude/hooks/no-push.ps1](claude/hooks/no-push.ps1) | Blocks push, PR and publish commands |
-| `claude/hooks/*.tests.ps1` | Tests for each hook |
-| [install.ps1](install.ps1) | Links it all into `~/.claude` |
+| [claude/hooks/guard.patterns](claude/hooks/guard.patterns) | Blocks edits that skip tests or swallow errors |
+| [claude/hooks/no-push.patterns](claude/hooks/no-push.patterns) | Blocks push, PR and publish commands |
+| `claude/hooks/*.ps1`, `*.sh` | Thin hook runners for Windows and Linux that read the patterns |
+| `claude/hooks/*.cases.json`, `test.*` | Shared test cases and a runner per OS |
+| [claude/permissions.json](claude/permissions.json) | `ask` and `deny` rules both installers add |
+| [install.ps1](install.ps1), [install.sh](install.sh) | Link it all into `~/.claude` on Windows or Linux |
 
 Only `/review` and `/retrospective` are model-invoked. The rest only run when you type them, so they cost no context.
 
@@ -73,17 +75,20 @@ Only `/review` and `/retrospective` are model-invoked. The rest only run when yo
 | All code | `claude/CLAUDE.md` |
 | One language or framework | `claude/conventions/<name>.md` |
 | One project | That repo's `CLAUDE.md` |
-| Must never break | A pattern in `guard.ps1` |
+| Must never break | A pattern in `guard.patterns` |
 
 The project file wins over a conventions doc. Rules added by `/retrospective` to a conventions doc carry `(lesson)`, so a refresh keeps them.
 
 ## Install
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
+powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
+```
+```bash
+bash install.sh                                         # Linux, needs jq, git and GNU grep
 ```
 
-It backs up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then it:
+Both installers do the same thing. Each backs up `settings.json` and `CLAUDE.md` to `~/.claude/backups` first. Then it:
 
 - Links `~/.claude/workflow` to `claude/`, and each skill and the `agents` folder into `~/.claude`
 - Adds `@~/.claude/workflow/CLAUDE.md` to your `~/.claude/CLAUDE.md`
@@ -94,6 +99,8 @@ Links mean `/retrospective` and `/add-language` edit this repo directly. Commit 
 Then disable the `mattpocock-skills` plugin with `/plugin`. Its `tdd`, `grilling` and `code-review` overlap with these and would compete.
 
 ## Per project
+
+Empty repo? Follow [Starting from scratch](GUIDE.md#starting-from-scratch) first.
 
 Run `/setup-project` in the repo. It writes a short `CLAUDE.md` holding only what an agent can't find by looking:
 
@@ -111,6 +118,7 @@ The commands matter most. The agent can't verify what it can't run.
 ## Known gaps
 
 - The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it. The reviewer still checks.
+- The no-push hook reads the whole command text. A command that only mentions a push, like a heredoc writing one into a file, is blocked too. Write such files with the editor tools instead.
 - Plain `npm install` also asks, since the rule can't tell restoring from adding.
 - Plan mode is denied in your settings, so plans stop in chat.
 
