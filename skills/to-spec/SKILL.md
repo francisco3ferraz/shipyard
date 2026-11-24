@@ -10,6 +10,8 @@ Write down what we already decided. Do not interview me. If a decision the spec 
 ## 1. Gather
 Use this conversation, plus the file in the arguments if one was given. Explore the code the work will touch. Note what can be reused and where tests already live.
 
+Check every fact about an outside system, like a protocol, firmware, library or API, against its official docs or source at the version in use. Name the source in **Decisions**. Never state one from memory.
+
 ## 2. Write
 Save it to `docs/specs/<slug>/spec.md`, or the project's own spec folder if it has one. Use this template:
 

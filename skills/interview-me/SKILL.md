@@ -20,6 +20,7 @@ Ask each round with the AskUserQuestion tool, as the core rules say. Offer "Out 
 - Edge cases: empty, huge, duplicate, concurrent, partial failure, retries, permissions, existing data
 - Failure: what can go wrong, how it shows, who notices
 - Decisions I haven't made but the code will force
+- Exact output: messages, layouts, number formats, units and rounding. Tests will assert on them.
 - Scope: the smallest version that is still worth building
 - For a new project, also: who uses it and how, language and framework, storage, how it runs and ships. Recommend the boring, well-known option.
 

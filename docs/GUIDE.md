@@ -83,6 +83,7 @@ The spec is the cheapest place to catch a mistake. Check that:
 - Every behavior has a real example, input and expected output. Those become the tests.
 - Every error case says exactly what the user sees.
 - **Out of scope** lists what was ruled out.
+- Facts about outside systems, like protocols or firmware, name their source.
 
 Once approved, it says whether the spec fits one session or needs tickets. A spec records a decision. After it's built, leave it alone. Code and tests hold the current truth, and a later change gets its own spec.
 
@@ -96,7 +97,7 @@ It splits the spec into slices that each work end to end:
 3. Reject duplicate email                  Blocked by: 2
 ```
 
-Push back on horizontal tickets like "add the DB table", and on anything too big for one session.
+Push back on horizontal tickets like "add the DB table", and on anything too big for one session. A real system, like a simulator, should arrive in the earliest ticket that can use it.
 
 ### `/implement <spec, ticket or task>`
 
