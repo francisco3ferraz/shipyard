@@ -22,14 +22,24 @@ Read a few typical files and tests. Note only patterns that differ from common d
 
 List the languages and frameworks in use. Name the ones with no doc in `~/.claude/workflow/conventions/`, so I can run `/add-language`.
 
+Where the code consistently differs from a conventions doc, the code wins. Write the code's pattern into `CLAUDE.md` and list the difference for the hand-off. Don't ask me about it.
+
 Check whether the linter flags empty catches, swallowed errors, and skipped or focused tests. List the rules to turn on. Don't change the config.
 
 ## 5. Ask me
-Ask one numbered round, with your best guess for each. Ask only what the code can't tell you:
-- Gotchas and their reasons
-- Areas agents must not touch
-- Business rules that aren't obvious from the code
-- Mistakes agents have made here before
+Assume I may be new here and know less than you about this code. Ask one numbered round, only about what the code can't tell you: the reasons behind odd code, business rules, areas agents must not touch, and mistakes agents made here before.
+
+Format each question like this:
+
+```
+**Q1. <short title>**
+Now: <what the code does, with a `path:line` link>
+Why it matters: <what an agent might get wrong>
+Ask: <the question>
+Guess: <your best guess>
+```
+
+"Don't know" is a full answer. For those, write what the code does now as the rule, and list the question for the hand-off so I can ask a teammate.
 
 ## 6. Write
 Fill in [template.md](template.md). Keep it under 60 lines. Keep a line only if a new engineer would get it wrong without it. Don't restate config, except to name commands.
@@ -41,5 +51,7 @@ Report:
 - Commands that failed
 - Conventions docs to add with `/add-language`
 - Linter rules worth turning on
+- Where the code differs from a conventions doc
+- Questions I couldn't answer, to ask a teammate
 
-Suggest committing `CLAUDE.md`. When an agent trips on something project-specific later, `/retrospective` adds it here.
+Suggest committing `CLAUDE.md`. From here it stays fresh in three ways. The reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.

@@ -66,7 +66,7 @@ Run it at the repo root. It:
 2. Runs the build, lint and test commands, and keeps only the ones that worked.
 3. Maps the folders that matter, shared helpers and test fixtures.
 4. Notes patterns this codebase uses that a newcomer would miss.
-5. Asks you one round of questions the code can't answer: gotchas, no-go areas, business rules.
+5. Asks you one round of questions the code can't answer: gotchas, no-go areas, business rules. Each shows what the code does now and why it matters. New to the repo? Answer "don't know". It keeps the current behavior and lists the question for you to ask a teammate.
 6. Shows a draft `CLAUDE.md` under 60 lines. It writes it once you approve.
 
 At the end it reports failed commands, missing conventions docs and linter rules worth turning on. Act on all three:
@@ -267,9 +267,13 @@ Good lessons are concrete:
 
 **Prune monthly.** Read `claude/CLAUDE.md` and each conventions doc. Delete rules that never fire or that the linter now covers. Long rule files get ignored.
 
-**Refresh conventions yearly,** or after a major version bump. Run `/add-language <name>` again. It keeps your `(lesson)` rules.
+**How files that describe changing things stay fresh:**
 
-**Refresh project files when they drift.** Run `/setup-project` again after big restructures or tooling changes.
+| File | Goes stale when | Kept fresh by |
+|---|---|---|
+| Project `CLAUDE.md` | A command, folder or pattern changes | The reviewer flags the stale line, and it's fixed in that same change. Re-run `/setup-project` after big restructures. |
+| Conventions docs | The project moves to a newer version | `/implement` reports the gap. Run `/add-language <name> <version>`. It keeps your `(lesson)` rules. |
+| Specs and tickets | Never | They record a decision at one point in time. Code and tests hold the current truth. A later change gets its own spec. |
 
 **Test the hooks after editing them:**
 

@@ -46,3 +46,5 @@ Every behavior and edge case must be testable and carry a concrete example. They
 Show me the spec for review. Once I approve, set `Status: approved`.
 
 Then judge its size. If one session can build and verify it all, suggest `/implement <spec path>`. Otherwise, or if the repo has no code yet, suggest `/to-tickets <spec path>`.
+
+A spec records a decision at one point in time. Once it's done, leave it as it is. Code and tests hold the current truth, and a later change gets its own spec.

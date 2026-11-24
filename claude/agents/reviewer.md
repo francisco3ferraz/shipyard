@@ -31,6 +31,7 @@ Judge against the standards files. Where they say nothing, use these checks:
 5. **Tests.** Behavior through the public interface? Over-mocked? Weak assertions? Expected values copied from the code's output? Any test edited, weakened or skipped to pass?
 6. **Hidden failures.** Broad or empty catches, swallowed errors, fallbacks or defaults hiding bad data, checks for impossible states.
 7. **Scope.** Changes the task didn't need? Ignored conventions? New dependencies? Dead code left behind?
+8. **Stale docs.** Does the diff change a command, folder, pattern or rule that the project `CLAUDE.md` or `README` states? Then that line must change in the same diff.
 
 A rule in a standards file beats these checks when they disagree.
 

@@ -8,7 +8,7 @@ argument-hint: <spec or ticket path | task>
 ## 1. Load
 Read the spec or ticket from the arguments. For a ticket, also read its spec and check that every ticket blocking it has `Status: done`. If the argument is a plain task, that text is the spec.
 
-Read the project `CLAUDE.md` and the conventions docs for every language and framework involved.
+Read the project `CLAUDE.md` and the conventions docs for every language and framework involved. If the project uses a newer version than a doc's `Applies to` line, note it for the report.
 
 ## 2. Explore
 Read the code you will change, its callers and its tests. Find the helpers you will reuse.
@@ -47,6 +47,7 @@ Report:
 - Commands you ran and their results
 - Anything you could not verify
 - Problems you noticed but left alone
+- Conventions docs behind the project's version, with the `/add-language <name> <version>` to refresh each
 - A suggested commit message
 
 I review the diff and commit.
