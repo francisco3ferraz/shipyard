@@ -6,6 +6,7 @@
 - If the task has more than one reasonable reading, ask.
 
 ## Writing code
+- Write and edit code with the editor tools, not shell commands like `sed` or heredocs. The guard hook only sees the editor tools.
 - Write the least code that fully solves the task. Use plain functions and direct control flow.
 - Add an abstraction (class, interface, wrapper, factory, generic, config option) only when two real callers need it now.
 - Keep related logic together. One clear place per behavior.

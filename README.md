@@ -86,7 +86,7 @@ Plugins with overlapping skills, like `mattpocock-skills` with its `tdd`, `grill
 
 ## Known gaps
 
-- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it, though the quality reviewer still checks.
+- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it. A core rule forbids that, and the quality reviewer still checks, but no hook enforces it.
 - The no-push hook reads the whole command text, so a command that only mentions a push, like a heredoc, is blocked too.
 - Plain `npm install` also needs approval, since the rule can't tell restoring from adding.
 - Plan mode is assumed off, so plans stop in chat.

@@ -118,7 +118,7 @@ Use a fresh session per ticket. Leftover context makes the agent sloppier.
 6. **Review** with both reviewers and fix the findings, two rounds at most.
 7. **Close.** Tick the ticket, commit, report.
 
-The report lists the commits, what ran, what couldn't be verified, and problems seen but left alone.
+The report lists the commits, the failing assertion output from each red step, what ran, what couldn't be verified, and problems seen but left alone.
 
 ### Reading the commits and pushing
 

@@ -25,7 +25,7 @@ Stop for my approval when the input is a plain task, or the plan adds anything t
 ## 4. Build test-first
 For each behavior in order:
 
-1. **Red.** Write one test for this behavior through its seam. Take the expected value from the spec's example. Run it. It must fail on the assertion, not on a typo or import.
+1. **Red.** Write one test for this behavior through its seam, before any code for it. Take the expected value from the spec's example. Run it. It must fail on the assertion, not on a typo or import. Show me the failing assertion output before you write code.
 2. **Green.** Write the simplest code that passes. Run the test, then the tests near it.
 3. **Refactor.** With everything green, clean the code you just wrote: names, duplication with existing helpers, dead code, comments. Run the tests again.
 
@@ -46,6 +46,7 @@ Commit the work, following the commit rules in the core rules.
 
 Report:
 - The commits, each with its subject and what it holds
+- Each behavior with the failing assertion output from its red step
 - Commands you ran and their results
 - Anything you could not verify
 - Problems you noticed but left alone
