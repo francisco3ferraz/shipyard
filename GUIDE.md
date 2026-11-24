@@ -163,7 +163,7 @@ What happens:
 3. **Plan.** It lists the behaviors, the reuse and anything new. It only stops for your approval if the plan goes beyond the spec, like a new module or a dependency. For a plain-text task, it always stops.
 4. **Build test-first.** For each behavior: write a failing test, watch it fail, write the simplest code to pass, then clean up. A test that has passed is frozen.
 5. **Verify.** Full test suite, typecheck, linter, then it runs the change for real.
-6. **Review.** It calls `review` and fixes the findings. Up to two rounds.
+6. **Review.** It calls `review`, which runs `spec-reviewer` and `quality-reviewer` in parallel. It fixes the findings. Up to two rounds.
 7. **Close.** It ticks the ticket, sets `Status: done`, and reports.
 
 You'll get a report with changed files, commands run, anything it couldn't verify, problems it left alone and a suggested commit message.
@@ -212,7 +212,7 @@ New session:
 > /implement docs/specs/password-reset/01-request-reset.md
 ```
 
-It writes a failing test for "known email gets one email", makes it pass with the existing mailer, then moves on. The reviewer flags a `try/except` that hid mailer errors. It fixes it. You read the diff, commit, and start the next ticket in a fresh session.
+It writes a failing test for "known email gets one email", makes it pass with the existing mailer, then moves on. The quality reviewer flags a `try/except` that hid mailer errors. It fixes it. You read the diff, commit, and start the next ticket in a fresh session.
 
 ## 6. When something goes wrong
 
@@ -254,7 +254,7 @@ It will:
 | One language or framework | `claude/conventions/<name>.md`, tagged `(lesson)` |
 | Any code anywhere | `claude/CLAUDE.md` |
 | How a workflow step runs | That skill's `SKILL.md` |
-| Something review missed | `claude/agents/reviewer.md`, plus the rule's own home |
+| Something review missed | `claude/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
 
 4. Show you the exact edit and apply it once you agree.
 5. If a regex can catch the mistake reliably, add it to `guard.patterns` with test cases.
@@ -276,7 +276,7 @@ Good lessons are concrete:
 
 | File | Goes stale when | Kept fresh by |
 |---|---|---|
-| Project `CLAUDE.md` | A command, folder or pattern changes | The reviewer flags the stale line, and it's fixed in that same change. Re-run `/setup-project` after big restructures. |
+| Project `CLAUDE.md` | A command, folder or pattern changes | The quality reviewer flags the stale line, and it's fixed in that same change. Re-run `/setup-project` after big restructures. |
 | Conventions docs | The project moves to a newer version | `/implement` reports the gap. Run `/add-language <name> <version>`. It keeps your `(lesson)` rules. |
 | Specs and tickets | Never | They record a decision at one point in time. Code and tests hold the current truth. A later change gets its own spec. |
 
@@ -289,7 +289,7 @@ bash claude/hooks/test.sh                                         # Linux
 
 Rules live in `*.patterns` and test cases in `*.cases.json`. Both OSes share them, so edit those, not the scripts.
 
-**Watch the review findings.** If the reviewer keeps flagging the same thing, the rule belongs earlier: in `CLAUDE.md`, a conventions doc, or the linter.
+**Watch the review findings.** If a reviewer keeps flagging the same thing, the rule belongs earlier: in `CLAUDE.md`, a conventions doc, or the linter.
 
 ## 9. Troubleshooting
 

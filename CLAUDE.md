@@ -1,6 +1,6 @@
 # Shipyard
 
-A Claude Code workflow: skills, a reviewer subagent, hooks and core rules that push agents toward simple, reused, verified code. This file is for working on Shipyard itself. `claude/CLAUDE.md` holds the rules Shipyard ships to every project.
+A Claude Code workflow: skills, two reviewer subagents, hooks and core rules that push agents toward simple, reused, verified code. This file is for working on Shipyard itself. `claude/CLAUDE.md` holds the rules Shipyard ships to every project.
 
 ## Commands
 - Hook tests on Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File claude/hooks/test.ps1`
@@ -9,7 +9,7 @@ A Claude Code workflow: skills, a reviewer subagent, hooks and core rules that p
 
 ## Where things live
 - `claude/`: everything that gets installed. `~/.claude/workflow` links here.
-- `claude/skills/<name>/SKILL.md`: one folder per skill. `claude/agents/reviewer.md`: the reviewer.
+- `claude/skills/<name>/SKILL.md`: one folder per skill. `claude/agents/`: `spec-reviewer` and `quality-reviewer`, run in parallel by `review`.
 - `claude/hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
 - `claude/permissions.json`: `ask` and `deny` rules both installers add.
 - `claude/conventions/`: per-language docs written by `/add-language`. They are the user's content.

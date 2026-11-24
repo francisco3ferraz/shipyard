@@ -20,7 +20,7 @@ Workflow files live in `~/.claude/workflow/`, which links to the workflow git re
 | One language or framework | `~/.claude/workflow/conventions/<name>.md`, in the matching section |
 | Any code anywhere | `~/.claude/workflow/CLAUDE.md` |
 | How a workflow step runs | That skill's `SKILL.md` |
-| Something review should have caught | `~/.claude/workflow/agents/reviewer.md`, plus the rule's own home |
+| Something review should have caught | `~/.claude/workflow/agents/spec-reviewer.md` or `quality-reviewer.md`, plus the rule's own home |
 
 In a conventions doc, end the rule with `(lesson)` so `/add-language` keeps it on refresh.
 

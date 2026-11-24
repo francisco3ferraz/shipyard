@@ -19,7 +19,7 @@ New here? Read the [usage guide](GUIDE.md).
 2. **`/to-spec`** turns that into `docs/specs/<slug>/spec.md`. Every behavior has a concrete example, which becomes a test. It tells you whether the spec fits one session.
 3. **`/to-tickets`** splits a spec that's too big into vertical-slice tickets you approve. Each can be built and verified alone.
 4. **`/implement`** loads the ticket or spec, plus the conventions docs. It plans, then runs red, green, refactor per behavior. Passing tests are frozen. It verifies for real, then calls `review`.
-5. **`review`** sends the diff, the intent and the standards to the `reviewer` subagent. It reports two axes separately: **Spec** and **Quality**. `/implement` fixes the findings. You can also run `/review` by hand on any diff.
+5. **`review`** runs two subagents in parallel with fresh eyes. `spec-reviewer` checks the diff against the spec, ticket or prompt. `quality-reviewer` checks it against the coding rules and conventions. Their reports stay separate, so one can't hide the other. You can also run `/review` by hand on any diff.
 6. **`/retrospective`** turns a correction into one rule and files it where it belongs. It also fires when you say "don't do that again".
 7. **`/add-language`** researches primary sources and writes `conventions/<name>.md`. Implement and review both read it.
 
@@ -43,13 +43,13 @@ Agents can never push or publish. `deny` rules block `git push`, `gh pr create` 
 
 | Problem | Where it's handled |
 |---|---|
-| Hard to read | Core rules, conventions docs, refactor step, reviewer check 1 |
-| Too many comments | Core rules, reviewer check 2 |
-| Duplicated logic | Explore step, refactor step, reviewer greps for existing helpers |
-| Over-engineering | Core rules, `/interview-me` pushes for the smallest version, reviewer check 4 |
-| Low-value tests | Spec examples become expected values, frozen tests, `guard` hook, reviewer check 5 |
-| Hidden failures | Core rules, `guard` hook, spec lists every error case, reviewer check 6 |
-| Scope creep, unverified | Spec axis flags unrequested behavior, dependency installs ask you, verify step |
+| Hard to read | Core rules, conventions docs, refactor step, quality reviewer check 1 |
+| Too many comments | Core rules, quality reviewer check 2 |
+| Duplicated logic | Explore step, refactor step, quality reviewer greps for existing helpers |
+| Over-engineering | Core rules, `/interview-me` pushes for the smallest version, quality reviewer check 4 |
+| Low-value tests | Spec examples become expected values, frozen tests, `guard` hook, quality reviewer check 5 |
+| Hidden failures | Core rules, `guard` hook, spec lists every error case, quality reviewer check 6 |
+| Scope creep, unverified | Spec reviewer flags unasked changes, dependency installs ask you, verify step |
 
 ## Files
 
@@ -57,7 +57,8 @@ Agents can never push or publish. `deny` rules block `git push`, `gh pr create` 
 |---|---|
 | [claude/CLAUDE.md](claude/CLAUDE.md) | Core rules, loaded in every session |
 | [claude/skills/](claude/skills/) | `interview-me`, `to-spec`, `to-tickets`, `implement`, `review`, `retrospective`, `add-language`, `setup-project` |
-| [claude/agents/reviewer.md](claude/agents/reviewer.md) | Read-only two-axis reviewer |
+| [claude/agents/spec-reviewer.md](claude/agents/spec-reviewer.md) | Read-only check against the spec, ticket or prompt |
+| [claude/agents/quality-reviewer.md](claude/agents/quality-reviewer.md) | Read-only check against the coding rules |
 | [claude/conventions/](claude/conventions/) | One doc per language or framework, from `/add-language` |
 | [claude/hooks/guard.patterns](claude/hooks/guard.patterns) | Blocks edits that skip tests or swallow errors |
 | [claude/hooks/no-push.patterns](claude/hooks/no-push.patterns) | Blocks push, PR and publish commands |
@@ -117,7 +118,7 @@ The commands matter most. The agent can't verify what it can't run.
 
 ## Known gaps
 
-- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it. The reviewer still checks.
+- The guard only sees `Write`, `Edit` and `MultiEdit`. Code written through shell commands skips it. The quality reviewer still checks.
 - The no-push hook reads the whole command text. A command that only mentions a push, like a heredoc writing one into a file, is blocked too. Write such files with the editor tools instead.
 - Plain `npm install` also asks, since the rule can't tell restoring from adding.
 - Plan mode is denied in your settings, so plans stop in chat.

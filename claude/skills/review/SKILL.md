@@ -20,10 +20,14 @@ If none exists, ask me what the change was for.
 - The project `CLAUDE.md` and any coding standards doc it points to
 - `~/.claude/workflow/conventions/<name>.md` for each language and framework in the diff, if it exists
 
-## 4. Run the reviewer
-Spawn the `reviewer` subagent. Pass it the diff command, the intent path or quoted text, and the list of standards files. Pass nothing else. It must judge the change with fresh eyes.
+## 4. Run both reviewers
+Spawn both subagents in one message, so they run in parallel:
+- `spec-reviewer`, with the diff command and the intent path or quoted text
+- `quality-reviewer`, with the diff command and the list of standards files
+
+Pass each only its own inputs. Each judges the change with fresh eyes, and keeping them apart stops one axis from hiding the other.
 
 ## 5. Report
-Show its findings as it returned them, under **Spec**, **Quality** and **Could delete**. Keep the axes separate.
+Show their findings as they returned them, under **Spec**, **Quality** and **Could delete**. Don't merge or re-rank across axes.
 
 If I called this skill directly, ask which findings to fix. If another skill called it, hand the findings back.
