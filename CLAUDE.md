@@ -14,7 +14,7 @@ A Claude Code workflow: skills, two reviewer subagents, hooks and core rules tha
 - `hooks/`: `*.patterns` hold the rules and `*.cases.json` the tests. The `.ps1` and `.sh` files are thin runners per OS.
 - `install/permissions.json`: `ask` and `deny` rules both installers add.
 - `rules/conventions/`: per-language docs written by `/add-language`. They are the user's content.
-- `README.md` explains what and why. `docs/GUIDE.md` explains how to use it. Both are my own notes: first person, plain, no selling.
+- `README.md` explains what and why. `docs/GUIDE.md` explains how to use it. Both document a personal setup: proper docs in a neutral voice, no first person, no selling.
 
 ## Conventions
 - Write skills the way the core rules ask for code: short, plain, concrete. Steps in order, each with a clear finish line. Say what to do, not what to avoid.
