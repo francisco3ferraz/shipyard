@@ -23,19 +23,11 @@ Read a few typical files and tests. Note only patterns that differ from common d
 Check whether the linter flags empty catches, swallowed errors, and skipped or focused tests. List the rules to turn on. Don't change the config.
 
 ## 5. Ask me
-Assume I may be new here and know less than you about this code. Ask one numbered round, only about what the code can't tell you: the reasons behind odd code, business rules, areas agents must not touch, and mistakes agents made here before.
+Assume I may be new here and know less than you about this code. Ask one round, only about what the code can't tell you: the reasons behind odd code, business rules, areas agents must not touch, and mistakes agents made here before.
 
-Format each question like this:
+Ask with the AskUserQuestion tool, as the core rules say. Each question's text says what the code does now, with its `path:line`, and what an agent might get wrong. Your best guess is the recommended option. Offer "Don't know" on every question about the code.
 
-```
-**Q1. <short title>**
-Now: <what the code does, with a `path:line` link>
-Why it matters: <what an agent might get wrong>
-Ask: <the question>
-Guess: <your best guess>
-```
-
-Always ask one more question: should `CLAUDE.md` and the specs folder be committed, or stay local to this clone? Guess committed for a personal repo, local for a shared one.
+Always ask one more question: should `CLAUDE.md` and the specs folder be committed, or stay local to this clone? Recommend committed for a personal repo, local for a shared one.
 
 "Don't know" is a full answer. For those, write what the code does now as the rule, and list the question for the hand-off so I can ask a teammate.
 

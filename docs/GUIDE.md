@@ -72,15 +72,7 @@ If the decisions don't fit in one line, start with `/interview-me`.
 
 ### `/interview-me <idea>`
 
-It looks things up in the code first, then asks in rounds:
-
-```
-**Q1. Duplicate emails**
-Two users sign up with the same email in different cases. Same account or two?
-Recommend: same account. Compare emails lowercased.
-```
-
-Answer by number, like "Q1 yes, Q2 the second one, Q3 not sure, what would you do?". "Out of scope" is always an option, and the smaller first version is usually the right one. It keeps a **Decided** list and stops when nothing is left to ask and the list is confirmed.
+It looks things up in the code first, then asks in rounds through Claude Code's question picker. Each question lists its options with the recommended one first. "Other" takes a free answer, like "not sure, what would you do?". "Out of scope" is offered wherever a decision could be cut, and the smaller first version is usually the right one. It keeps a **Decided** list and stops when nothing is left to ask and the list is confirmed.
 
 ### `/to-spec`
 

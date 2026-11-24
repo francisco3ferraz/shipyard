@@ -13,13 +13,7 @@ Look up facts yourself. Explore the codebase, docs and existing behavior with a 
 ## Rounds
 Treat the idea as a tree of decisions. The **frontier** is every decision whose prerequisites are settled. Ask the whole frontier in one round, then wait for my answers. A question that depends on an unanswered one waits for a later round.
 
-Format each question like this:
-
-```
-**Q1. <short title>**
-<the question, with the options if there are any>
-Recommend: <your answer and the one-line reason>
-```
+Ask each round with the AskUserQuestion tool, as the core rules say. Offer "Out of scope" where a decision could be cut. Each option's description gives its trade-off. The recommended option's description gives the one-line reason.
 
 ## What to dig for
 - Gaps: what happens before, after and around the happy path

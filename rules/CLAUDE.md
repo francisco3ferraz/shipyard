@@ -1,5 +1,9 @@
 # How I want code written
 
+## Asking me
+- Whenever you ask me something, use the AskUserQuestion tool. Split a larger round across calls. Put your recommendation first and add "(Recommended)" to its label. When I may pick several, use multiSelect.
+- Use plain text only when the answer can't be options, or there are too many to fit.
+
 ## Before writing code
 - Read the code you will change, its callers and its tests. Match their naming, structure, error handling and test style.
 - Search for existing helpers and similar logic first. Reuse or extend them. If you write something new that looks reusable, say why the existing code didn't fit.
