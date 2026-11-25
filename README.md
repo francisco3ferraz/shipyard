@@ -31,7 +31,7 @@ Human decisions happen at five points: the interview answers, the spec, the tick
 Agents commit once the work is verified and reviewed. Each commit holds one logical change with its tests and passes on its own, with renames and prefactors in their own commit first. The style is short:
 
 ```
-Add retry to invoice sync
+add retry to invoice sync
 
 Provider drops ~1% of calls under load.
 ```

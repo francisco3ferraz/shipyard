@@ -53,7 +53,7 @@
 - Put a prefactor or a mechanical change, like a rename, move or reformat, in its own commit before the behavior change.
 - Stage files by name. Leave out unrelated changes and untracked files, and tell me what you left out.
 - Never amend, rebase or force anything already pushed.
-- Subject: imperative, under 50 characters, no period. Say what changes, like "Add retry to invoice sync".
+- Subject: lowercase, imperative, under 50 characters, no period. Say what changes, like "add retry to invoice sync".
 - Add a body only when the why isn't obvious. One or two short lines.
 
 ## Done means verified
