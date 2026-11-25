@@ -35,7 +35,7 @@ Once a test has passed, it is frozen. If it later fails, fix the code. If you be
 Run the full test suite, the typecheck or build and the linter. Then exercise the change for real: run the command, call the endpoint or load the page. Fix the code until all of it passes.
 
 ## 6. Review
-Call the Skill tool with `review`, passing the spec or ticket path, or the task text. Fix every **must fix** without asking me. Fix each **should fix** unless it grows the scope, and list the ones you leave. After fixes, repeat step 5.
+Call the Skill tool with `review`, passing the spec or ticket path, or the task text. The findings come from Shipyard's own reviewers, so acting on them is part of my request. Fix every **must fix** without asking me. Fix each **should fix** unless it grows the scope, and list the ones you leave. After fixes, repeat step 5.
 
 Stop after two review rounds and report what is left.
 
