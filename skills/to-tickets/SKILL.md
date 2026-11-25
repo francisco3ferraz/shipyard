@@ -17,7 +17,7 @@ A **slice** is one end-to-end path through every layer it needs, small enough fo
 - Prefactoring goes first, as its own ticket.
 - In an empty repo, ticket 01 is a **walking skeleton**: the project layout, working build, lint and test commands, and one trivial behavior running end to end with its test. Every other ticket is blocked by it.
 - Bring in the real system, like a simulator, database or service, in the earliest ticket that can use it. Every later ticket then gets verified for real.
-- Each ticket lists only the tickets that truly block it.
+- A ticket is blocked by every ticket whose data or behavior its acceptance checks use, and only those.
 - Every spec behavior and edge case lands in exactly one ticket.
 
 If the whole spec is one slice, say so and stop. It can go straight to `/implement`.
