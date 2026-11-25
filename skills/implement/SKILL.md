@@ -42,6 +42,8 @@ Stop after two review rounds and report what is left.
 ## 7. Close
 For a ticket, tick its acceptance boxes and set `Status: done`.
 
+If the change added or changed a command, a top-level folder or a pattern a newcomer would miss, update the project `CLAUDE.md` to match. Commit it with the change if the project `CLAUDE.md` says it is committed.
+
 Commit the work, following the commit rules in the core rules. Stage spec and ticket files only if the project `CLAUDE.md` says specs are committed.
 
 Report:

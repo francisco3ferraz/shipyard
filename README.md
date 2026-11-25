@@ -13,16 +13,16 @@ Usage notes are in [docs/GUIDE.md](docs/GUIDE.md).
                                                          ↑                                 │
                                                          └────────── next ticket ──────────┘
 /retrospective         after a correction or a rough session
-/setup-project         once per repo, again when it drifts
+/setup-project         first in every repo, again after big restructures
 ```
 
 1. **`/interview-me`** asks questions in rounds until every decision is made. Each question comes with a recommended answer.
 2. **`/to-spec`** writes down the decisions. Every behavior gets a concrete example, which later becomes a test.
 3. **`/to-tickets`** splits a spec that's too big for one session into slices that can each be built and verified alone.
-4. **`/implement`** builds a spec, ticket or task test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes the findings and commits.
+4. **`/implement`** builds a spec, ticket or task test-first: red, green, refactor. It verifies the change for real, runs `review`, fixes the findings, updates the project `CLAUDE.md` when a command, folder or pattern changes, and commits.
 5. **`review`** runs two subagents in parallel. `spec-reviewer` checks the change against what was asked. `quality-reviewer` holds it against the core rules and the project `CLAUDE.md`. Keeping them apart stops a clean diff from hiding a missing behavior, and the other way round.
 6. **`/retrospective`** turns a correction, or a whole session, into fixes to the setup. Each fix goes in the strongest home that can carry it, preferring checks over lines in a `CLAUDE.md`.
-7. **`/setup-project`** writes a short `CLAUDE.md` for a repo, holding only what an agent can't learn from the code.
+7. **`/setup-project`** runs first in a repo, even an empty one. It writes a basic `CLAUDE.md` with verified commands and the layout. Later steps add what an agent can't learn from the code.
 
 Human decisions happen at five points: the interview answers, the spec, the ticket split, the commits, and the push.
 

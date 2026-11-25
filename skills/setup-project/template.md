@@ -1,6 +1,6 @@
 # <Project name>
 
-<One or two lines: what this is and who uses it.>
+<One line: what this is and who uses it.>
 
 ## Commands
 - Build / typecheck: `<cmd>`
@@ -14,8 +14,6 @@
 - Specs and tickets: `docs/specs/`, <committed | local only, never commit>
 
 ## Conventions
-- Errors: <how errors are raised, and the one place they're handled>
-- Tests: <where they live, what may be mocked, fixtures to reuse>
 - <Pattern this codebase uses that a newcomer would miss>
 
 ## Gotchas

@@ -30,27 +30,29 @@ Re-run the installer whenever a skill is added, renamed or removed. It's safe to
 
 ## New repo
 
+`/setup-project` runs first in every repo, empty or not. It writes only the basics, and the project `CLAUDE.md` grows from there, as [Upkeep](#upkeep) describes.
+
 ### Existing code
 
-1. `/setup-project` at the repo root. It runs the build, lint and test commands, maps the layout, and asks one round of questions the code can't answer. Each question shows what the code does now and why it matters. "Don't know" is a valid answer for anyone new to the codebase: it keeps the current behavior and lists the question to ask a teammate.
-2. It shows a draft `CLAUDE.md` under 60 lines that describes the code as it is today. An answer that asks for a change becomes a task, not a line in the file. It always asks whether `CLAUDE.md` and the specs are committed or stay local. Local files go in `.git/info/exclude`, which keeps them out of git without touching `.gitignore`. Files git already tracks need `git rm --cached` first, and it asks before running that. Otherwise it commits `CLAUDE.md` once approved, then any specs not yet committed in their own commit.
+1. `/setup-project` at the repo root. It runs the build, lint and test commands and notes the top-level folders. An existing `CLAUDE.md` is refreshed: what's still true stays.
+2. It asks whether `CLAUDE.md` and the specs are committed or stay local. Local files go in `.git/info/exclude`, which keeps them out of git without touching `.gitignore`. Files git already tracks need `git rm --cached` first, and it asks before running that.
+3. It shows a draft `CLAUDE.md` that describes the repo as it is today. Once approved, it commits it, then any specs not yet committed in their own commit.
 
 Then work through its hand-off list:
 
 - **Failed commands.** Fix these first. Nothing gets verified if the commands don't run.
 - **Linter rules.** Turn them on. Linters catch empty catches and focused tests in places the hooks can't see.
-- **Open questions.** Ask a teammate, then add the answer with `/retrospective`.
-- **Tasks.** Each comes as a ready `/implement` or `/interview-me` line.
+- **Next step.** `/interview-me <idea>`, or `/implement <task>` when every decision is already made.
 
 ### From scratch
 
-`/setup-project` needs code to read, so an empty repo starts with a **walking skeleton**: the thinnest version that builds, lints, tests and runs one trivial behavior end to end.
+An empty repo starts with a **walking skeleton**: the thinnest version that builds, lints, tests and runs one trivial behavior end to end.
 
-1. `git init` and open Claude Code there. To keep specs and `CLAUDE.md` local, add `docs/specs/` and `CLAUDE.md` to `.git/info/exclude` now, before anything is committed.
-2. `/interview-me <what to build>`. It also asks about stack, storage and how it runs. The boring, well-known option is usually right.
-3. `/to-spec`, then `/to-tickets`. Ticket 01 is always the skeleton.
-4. `/implement` ticket 01 in a fresh session.
-5. `/setup-project`, now that there are real commands and a layout.
+1. `git init` and open Claude Code there.
+2. `/setup-project`. It asks what the project is and whether `CLAUDE.md` and specs are committed, then writes a stub with empty sections.
+3. `/interview-me <what to build>`. It also asks about stack, storage and how it runs. The boring, well-known option is usually right.
+4. `/to-spec`, then `/to-tickets`. Ticket 01 is always the skeleton.
+5. `/implement` ticket 01 in a fresh session. It fills in the commands and layout in `CLAUDE.md`.
 6. Continue with ticket 02.
 
 Keep the skeleton tiny. Its job is to prove the commands work, not to start on features.
@@ -109,7 +111,7 @@ Use a fresh session per ticket. Leftover context makes the agent sloppier.
 4. **Build test-first.** Failing test, watch it fail, simplest code to pass, clean up. A test that has passed is frozen.
 5. **Verify.** Full tests, typecheck, linter, then the change for real.
 6. **Review** with both reviewers and fix the findings, two rounds at most.
-7. **Close.** Tick the ticket, commit, report.
+7. **Close.** Tick the ticket, update the project `CLAUDE.md` if a command, folder or pattern changed, commit, report.
 
 The report lists the commits, the failing assertion output from each red step, what ran, what couldn't be verified, and problems seen but left alone.
 
@@ -170,7 +172,7 @@ Concrete rules work, vague ones don't:
 
 | File | Goes stale when | Kept current by |
 |---|---|---|
-| A project `CLAUDE.md` | A command, folder or pattern changes | The quality reviewer flags it, and it's fixed in the same change. Re-run `/setup-project` after big restructures. |
+| A project `CLAUDE.md` | A command, folder or pattern changes | `/implement` adds commands, folders and patterns its changes create. `/retrospective` adds what agents trip on. The quality reviewer flags any line a change makes stale. Re-run `/setup-project` after big restructures. |
 | Specs and tickets | Never | They record a decision. Code and tests hold the current truth. |
 
 **Testing the hooks after changing them:**
@@ -202,7 +204,7 @@ Rules are in `*.patterns` and cases in `*.cases.json`, shared by both OSes. Edit
 
 | Command | When |
 |---|---|
-| `/setup-project` | Once per repo, again when it drifts |
+| `/setup-project` | First, in every repo. Again after big restructures |
 | `/interview-me <idea>` | Any feature with open decisions |
 | `/to-spec` | Right after the interview |
 | `/to-tickets <spec>` | When the spec needs more than one session |

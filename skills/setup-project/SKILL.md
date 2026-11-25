@@ -1,48 +1,37 @@
 ---
 name: setup-project
-description: Write or refresh the project's CLAUDE.md from what the repo actually contains.
+description: Set up the project's CLAUDE.md with the basics, before any other skill runs in a repo.
 disable-model-invocation: true
 ---
 
-A project `CLAUDE.md` loads in every session, so every line costs attention. It holds only what an agent can't find by looking: verified commands, where things live, this codebase's own patterns, and gotchas. Everything else stays in the code and config, where it can't go stale.
+A project `CLAUDE.md` loads in every session, so every line costs attention. It holds only what an agent can't find by looking: verified commands, where things live, this codebase's own patterns, and gotchas. This skill writes the basics. The rest is added as the work shows it.
 
-## 1. Survey
-If the repo has no code yet, stop. Tell me to build the walking skeleton first: `/interview-me`, `/to-spec`, `/to-tickets`, then `/implement` ticket 01. Run this skill after that.
+Run it first in any repo, empty or not.
 
-Read the manifests, scripts, CI config, linter and test config, `README`, `CONTRIBUTING`, the top-level layout and the last 20 commit messages. If a `CLAUDE.md` or `AGENTS.md` already exists, this is a refresh. Keep what is still true and cut the rest.
+## 1. Look
+Read the manifests, scripts, CI config, linter and test config, `README` and the top-level layout. If a `CLAUDE.md` or `AGENTS.md` already exists, this is a refresh. Keep what is still true and cut the rest. Note the top-level folders and what each holds.
 
-## 2. Verify the commands
+If the repo has no code yet, skip to step 3.
+
+## 2. Verify commands and linter
 Find the commands for build or typecheck, lint, all tests, one test file, and running locally. Run each one except running locally. Record only the commands that worked. List the ones that failed, with their error.
-
-## 3. Map
-Note the folders that matter and what each holds. Find where test fixtures live. Use the project's specs folder if it has one. Otherwise use `docs/specs/`.
-
-## 4. Read the patterns
-Read a few typical files and tests. Note only patterns that differ from common defaults or that a newcomer would get wrong: how errors flow, how tests are set up, what gets mocked, naming habits.
 
 Check whether the linter flags empty catches, swallowed errors, and skipped or focused tests. List the rules to turn on. Don't change the config.
 
-## 5. Ask me
-Assume I may be new here and know less than you about this code. Ask one round, only about what the code can't tell you: the reasons behind odd code, business rules, areas agents must not touch, and mistakes agents made here before.
+## 3. Ask me
+Ask with the AskUserQuestion tool, as the core rules say:
+- Should `CLAUDE.md` and the specs folder be committed, or stay local to this clone? Recommend committed for a personal repo, local for a shared one.
+- For an empty repo, what is this project, in one line? Offer your best guess from the folder name and any files.
 
-Ask with the AskUserQuestion tool, as the core rules say. Each question's text says what the code does now, with its `path:line`, and what an agent might get wrong. Your best guess is the recommended option. Offer "Don't know" on every question about the code.
-
-Always ask one more question: should `CLAUDE.md` and the specs folder be committed, or stay local to this clone? Recommend committed for a personal repo, local for a shared one.
-
-"Don't know" is a full answer. For those, write what the code does now as the rule, and list the question for the hand-off so I can ask a teammate.
-
-An answer that asks the code to change is a task, not a rule. Keep `CLAUDE.md` true to the code as it is today, and list the task for the hand-off.
-
-## 6. Write
-Fill in [template.md](template.md). Keep it under 60 lines. Every line describes the code as it is now. Keep a line only if a new engineer would get it wrong without it. Don't restate config or anything one lookup in the code answers, except to name commands.
+## 4. Write
+Fill in [template.md](template.md). Leave a section empty when nothing is known yet. Every line describes the repo as it is now. Use the project's specs folder if it has one. Otherwise use `docs/specs/`.
 
 Show me the draft. Write `CLAUDE.md` at the repo root once I approve. If I chose local, add `CLAUDE.md` and the specs folder to `.git/info/exclude`, so git ignores them without a tracked change. If either is already tracked, exclude has no effect. Say so, and ask before running `git rm -r --cached` on it. Commit that removal on its own.
 
-## 7. Hand off
+Unless I chose local, commit `CLAUDE.md`, then any uncommitted specs in their own commit.
+
+## 5. Hand off
 Report:
 - Commands that failed
 - Linter rules worth turning on
-- Questions I couldn't answer, to ask a teammate
-- Tasks from my answers, each as a ready `/implement <task>` line, or `/interview-me <idea>` when it needs more decisions
-
-Unless I chose local, commit `CLAUDE.md`, then any uncommitted specs in their own commit. From here it stays fresh in three ways. The quality reviewer flags any change that makes a line stale. `/retrospective` adds what agents trip on. Re-running this skill refreshes it after big restructures.
+- The next step: `/interview-me <idea>`, or `/implement <task>` when every decision is already made
