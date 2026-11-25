@@ -14,7 +14,7 @@
 - Write and edit code with the editor tools, not shell commands like `sed` or heredocs. The guard hook only sees the editor tools.
 - Write the least code that fully solves the task. Use plain functions and direct control flow.
 - Add an abstraction (class, interface, wrapper, factory, generic, config option) only when two real callers need it now.
-- Keep related logic together. One clear place per behavior.
+- Keep related logic and data together. One clear place per behavior and per fact. Values that change together, like a reading and its time, live in one type.
 - Names use the domain's words and say what a thing is or does. One concept, one name, everywhere.
 - Comments say only what the code can't: why, business rules, workarounds, non-obvious constraints. One line when possible. Never narrate the code or restate a signature. A non-obvious rule or workaround always gets its why.
 
@@ -25,7 +25,7 @@
 - Trust the types and callers. Skip checks for states they already rule out.
 
 ## Tests
-- Test behavior through the public interface. A test should fail only when real behavior breaks.
+- Test each behavior through the public interface of the unit that owns it, so a change in one layer breaks only that layer's tests. A test should fail only when real behavior breaks.
 - Mock only real boundaries: network, clock, filesystem, third-party services. Use the real code for everything you own.
 - Assert exact expected values. "Not null", "was called" or "didn't throw" alone are not assertions.
 - Take expected values from the requirement, never from running the code.
