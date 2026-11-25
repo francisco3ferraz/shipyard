@@ -3,6 +3,15 @@
 ## Asking me
 - Whenever you ask me something, use the AskUserQuestion tool. Split a larger round across calls. Put your recommendation first and add "(Recommended)" to its label. When I may pick several, use multiSelect.
 - Use plain text only when the answer can't be options, or there are too many to fit.
+- When AskUserQuestion isn't available, ask in this format and stop:
+  ```
+  Q1. Where do sessions live?
+    a. Redis (Recommended): already in the stack
+    b. Postgres: one less service
+    c. Other
+  Q2. ...
+  Reply like: 1a 2b
+  ```
 - Show anything longer than a line or two, like a draft, plan, spec, list or diff, in chat as plain text first. Keep it out of AskUserQuestion and its previews, which cut long content. Ask only the short decision there.
 
 ## Before writing code
